@@ -28,7 +28,6 @@ const toRp = (n) => "Rp " + n.toLocaleString("id-ID");
 export default function StatistikPelanggan() {
   return (
     <div>
-      {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="p-3 bg-gradient-to-br from-pink-100 to-rose-100 rounded-lg">
@@ -41,7 +40,6 @@ export default function StatistikPelanggan() {
         </div>
       </div>
 
-      {/* Main Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {customerMetrics.map((m) => (
           <div key={m.label} className="bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md transition-all">
@@ -58,11 +56,8 @@ export default function StatistikPelanggan() {
         ))}
       </div>
 
-      {/* Status Pesanan & Top Customers */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        {/* Order Status Distribution */}
         <div className="bg-white rounded-2xl border border-gray-100 p-8">
-          <h2 className="font-bold text-lg mb-2 text-gray-800">Distribusi Status Pesanan</h2>
           <p className="text-sm text-gray-400 mb-6">Breakdown pesanan berdasarkan status</p>
 
           <div className="space-y-4">
@@ -90,9 +85,7 @@ export default function StatistikPelanggan() {
           </div>
         </div>
 
-        {/* Top Customers */}
         <div className="bg-white rounded-2xl border border-gray-100 p-8">
-          <h2 className="font-bold text-lg mb-2 text-gray-800">Pelanggan Top</h2>
           <p className="text-sm text-gray-400 mb-6">5 pelanggan dengan transaksi terbanyak</p>
 
           <div className="space-y-3">
@@ -111,9 +104,7 @@ export default function StatistikPelanggan() {
         </div>
       </div>
 
-      {/* Customer Behavior */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-white rounded-2xl border border-gray-100 p-8">
           <h2 className="font-bold text-lg mb-2 text-gray-800">Perilaku Pembelian</h2>
           <p className="text-sm text-gray-400 mb-6">Pola transaksi pelanggan</p>
 

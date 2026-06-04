@@ -21,7 +21,6 @@ export default function OwnerDashboard() {
 
   return (
     <div>
-      {/* Stat Overview Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {customerStats.map((s) => (
           <div key={s.label} className="bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md transition-all">
@@ -33,10 +32,8 @@ export default function OwnerDashboard() {
         ))}
       </div>
 
-      {/* Preview Cards Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Grafik Pertumbuhan Preview */}
-        <div
           className="bg-white rounded-2xl border border-gray-100 p-6 cursor-pointer hover:shadow-lg hover:border-amber-200 transition-all group"
           onClick={() => navigate("/owner-grafik")}
         >
@@ -51,7 +48,6 @@ export default function OwnerDashboard() {
           </div>
 
           {/* Mini Chart */}
-          <div className="flex items-end gap-2 h-20 mb-4">
             {[8, 14, 11, 19, 24, 18].map((v, i) => (
               <div
                 key={i}
@@ -68,7 +64,6 @@ export default function OwnerDashboard() {
         </div>
 
         {/* Statistik Pelanggan Preview */}
-        <div
           className="bg-white rounded-2xl border border-gray-100 p-6 cursor-pointer hover:shadow-lg hover:border-pink-200 transition-all group"
           onClick={() => navigate("/owner-statistik")}
         >
@@ -83,7 +78,6 @@ export default function OwnerDashboard() {
           </div>
 
           {/* Mini Stats */}
-          <div className="space-y-2 mb-4">
             <div className="flex justify-between items-center text-sm">
               <span className="text-gray-600">Pelanggan Aktif</span>
               <span className="font-bold text-pink-600">842</span>
@@ -108,7 +102,6 @@ export default function OwnerDashboard() {
 
         {/* Top Produk Preview */}
         <div className="bg-white rounded-2xl border border-gray-100 p-6">
-          <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="font-bold text-gray-800">Produk Terlaris</h3>
               <p className="text-xs text-gray-400 mt-1">Top 3 bulan ini</p>
@@ -132,7 +125,6 @@ export default function OwnerDashboard() {
 
         {/* Estimasi Pendapatan Preview */}
         <div className="bg-white rounded-2xl border border-gray-100 p-6">
-          <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="font-bold text-gray-800">Estimasi Pendapatan</h3>
               <p className="text-xs text-gray-400 mt-1">Bulan ini</p>

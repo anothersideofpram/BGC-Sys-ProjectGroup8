@@ -49,7 +49,6 @@ export default function Dashboard() {
 
   return (
     <div>
-      {/* Quick Access Summary */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {summaryCards.map((card) => {
           const IconComponent = card.icon;
@@ -74,7 +73,6 @@ export default function Dashboard() {
         })}
       </div>
 
-      {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {quickStats.map((stat) => (
           <div key={stat.label} className="bg-white rounded-lg border border-gray-100 p-4">
@@ -87,9 +85,7 @@ export default function Dashboard() {
         ))}
       </div>
 
-      {/* Action Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Kelola Pesanan */}
         <div
           className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-200 p-6 cursor-pointer hover:shadow-lg hover:border-blue-300 transition-all"
           onClick={() => navigate("/orders")}
@@ -108,7 +104,6 @@ export default function Dashboard() {
           </button>
         </div>
 
-        {/* Kelola Produk */}
         <div
           className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl border border-green-200 p-6 cursor-pointer hover:shadow-lg hover:border-green-300 transition-all"
           onClick={() => navigate("/manage-produk")}
@@ -127,7 +122,6 @@ export default function Dashboard() {
           </button>
         </div>
 
-        {/* Pantau Feedback */}
         <div
           className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl border border-purple-200 p-6 cursor-pointer hover:shadow-lg hover:border-purple-300 transition-all"
           onClick={() => navigate("/feedback-admin")}
@@ -147,8 +141,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Info Box */}
-      <div className="mt-8 p-6 bg-gradient-to-r from-amber-50 to-yellow-50 rounded-xl border border-amber-200">
+      <div className="p-4 bg-amber-50 rounded-lg border border-amber-200">
         <p className="text-sm text-amber-900">
           <span className="font-bold">💡 Tip:</span> Klik pada setiap item untuk melihat detail dan mengelola data Anda dengan lebih baik.
         </p>

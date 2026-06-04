@@ -23,7 +23,6 @@ export default function RiwayatPesanan() {
 
   return (
     <div className="min-h-screen bg-[#fffafb]">
-      {/* HERO HEADER */}
       <div className="kol-hero-header px-6 sm:px-10 py-10">
         <button onClick={() => navigate(-1)} className="mb-4 flex items-center gap-2 text-sm font-medium hover:opacity-70 transition-opacity" style={{ color: "#b8860b", fontFamily: "var(--font-cinzel,serif)" }}>
           ← Kembali
@@ -38,7 +37,6 @@ export default function RiwayatPesanan() {
 
       {/* TABEL */}
       <div className="px-6 sm:px-10 pb-16">
-        {/* Stat cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
           {Object.entries(statusConfig).map(([key, cfg]) => (
             <div key={key} className="bg-white rounded-2xl border border-pink-100 px-5 py-4">
@@ -50,7 +48,6 @@ export default function RiwayatPesanan() {
           ))}
         </div>
 
-        {/* Tabel desktop */}
         <div className="bg-white rounded-3xl border border-pink-100 overflow-hidden">
           <table className="w-full text-sm">
             <thead>
@@ -87,7 +84,6 @@ export default function RiwayatPesanan() {
         </div>
       </div>
 
-      {/* MODAL DETAIL */}
       {selected && (
         <div className="kol-modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setSelected(null)}>
           <div className="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl" onClick={e => e.stopPropagation()}>

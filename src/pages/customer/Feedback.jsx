@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-/* Feedback yang sudah ada per produk (bisa dilihat semua customer) */
 const productFeedbacks = {
   "Blus Elegance": [
     { user: "Sari D.", rating: 5, komentar: "Bahannya lembut dan jahitannya rapi. Sangat puas!", tanggal: "10 Mei 2025" },
@@ -56,7 +55,6 @@ export default function Feedback() {
 
   return (
     <div className="min-h-screen bg-[#fffafb]">
-      {/* HERO HEADER */}
       <div className="kol-hero-header px-6 sm:px-10 py-10">
         <button onClick={() => navigate(-1)} className="mb-4 flex items-center gap-2 text-sm font-medium hover:opacity-70 transition-opacity" style={{ color: "#b8860b", fontFamily: "var(--font-cinzel,serif)" }}>
           ← Kembali
@@ -70,7 +68,6 @@ export default function Feedback() {
       </div>
 
       <div className="px-6 sm:px-10 pb-16">
-        {/* Pilih Produk */}
         <div className="mb-6">
           <label className="block text-sm font-medium mb-2" style={{ color: "#6b4a58" }}>Pilih Produk</label>
           <select

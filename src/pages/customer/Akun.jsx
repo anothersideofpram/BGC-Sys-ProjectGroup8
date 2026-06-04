@@ -31,7 +31,6 @@ export default function Akun() {
 
   return (
     <div className="min-h-screen bg-[#fffafb]">
-      {/* HERO HEADER */}
       <div className="kol-hero-header px-6 sm:px-10 py-10">
         <button onClick={() => navigate(-1)} className="mb-4 flex items-center gap-2 text-sm font-medium hover:opacity-70 transition-opacity" style={{ color: "#b8860b", fontFamily: "var(--font-cinzel,serif)" }}>
           ← Kembali
@@ -43,7 +42,6 @@ export default function Akun() {
       </div>
 
       <div className="px-6 sm:px-10 pb-16 max-w-4xl">
-        {/* Stat cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
           {stats.map((s) => (
             <div key={s.label} className="bg-white rounded-2xl border border-pink-100 px-5 py-5">
@@ -53,11 +51,9 @@ export default function Akun() {
           ))}
         </div>
 
-        {/* Profil Card */}
         <div className="bg-white rounded-3xl border border-pink-100 p-8 mb-6">
           <div className="flex items-center justify-between mb-7 flex-wrap gap-3">
             <div className="flex items-center gap-5">
-              {/* Avatar */}
               <div className="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold shrink-0"
                 style={{ background: "linear-gradient(135deg,#e91e8c,#c9a227)", color: "white" }}>
                 {form.nama.charAt(0)}
@@ -105,7 +101,6 @@ export default function Akun() {
           </div>
         </div>
 
-        {/* Aksi Cepat */}
         <div className="bg-white rounded-3xl border border-pink-100 p-6">
           <p className="font-semibold text-sm mb-4" style={{ color: "#1a0a10" }}>Aksi Cepat</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -123,7 +118,6 @@ export default function Akun() {
           </div>
         </div>
 
-        {/* Logout */}
         <button onClick={() => navigate("/login")} className="mt-6 flex items-center gap-2 text-sm font-medium text-red-400 hover:text-red-500 transition-colors px-2">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
           Keluar dari Akun

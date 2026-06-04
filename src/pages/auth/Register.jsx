@@ -78,14 +78,12 @@ export default function Register() {
 
   return (
     <>
-      {/* Welcome Message */}
       <div className="text-center mb-6">
         <p className="text-pink-600 text-base font-medium">
           Bergabunglah bersama kami
         </p>
       </div>
 
-      {/* Card Register */}
       <div className="w-full">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold">
@@ -95,7 +93,6 @@ export default function Register() {
           </h2>
         </div>
 
-        {/* Error Message */}
         {error && (
           <div className="flex items-center gap-2 bg-pink-50 text-pink-600 p-3 rounded-xl mb-6 text-sm border border-pink-200">
             <BsFillExclamationDiamondFill className="text-pink-500 text-sm" />
@@ -104,7 +101,6 @@ export default function Register() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Nama Lengkap Field */}
           <div>
             <label className="block text-sm font-semibold text-pink-700 mb-2">
               Nama Lengkap
@@ -120,7 +116,6 @@ export default function Register() {
             />
           </div>
 
-          {/* Email Field */}
           <div>
             <label className="block text-sm font-semibold text-pink-700 mb-2">
               Email
@@ -136,7 +131,6 @@ export default function Register() {
             />
           </div>
 
-          {/* Nomor Telepon Field */}
           <div>
             <label className="block text-sm font-semibold text-pink-700 mb-2">
               Nomor Telepon
@@ -152,7 +146,6 @@ export default function Register() {
             />
           </div>
 
-          {/* Password Field */}
           <div>
             <label className="block text-sm font-semibold text-pink-700 mb-2">
               Password
@@ -168,7 +161,6 @@ export default function Register() {
             />
           </div>
 
-          {/* Konfirmasi Password Field */}
           <div>
             <label className="block text-sm font-semibold text-pink-700 mb-2">
               Konfirmasi Password
@@ -184,7 +176,6 @@ export default function Register() {
             />
           </div>
 
-          {/* Terms & Conditions */}
           <div className="flex items-start gap-2">
             <input
               type="checkbox"
@@ -210,7 +201,6 @@ export default function Register() {
             </label>
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
@@ -227,7 +217,6 @@ export default function Register() {
           </button>
         </form>
 
-        {/* Login Link */}
         <p className="text-center text-sm mt-6 text-pink-500">
           Sudah punya akun?{" "}
           <NavLink
@@ -240,7 +229,6 @@ export default function Register() {
           </NavLink>
         </p>
 
-        {/* Divider */}
         <div className="flex items-center my-6">
           <div className="flex-grow border-t border-pink-100"></div>
           <span className="px-4 text-xs text-pink-400 font-medium bg-transparent">
@@ -249,7 +237,6 @@ export default function Register() {
           <div className="flex-grow border-t border-pink-100"></div>
         </div>
 
-        {/* Google Register */}
         <button
           type="button"
           onClick={handleGoogleRegister}

@@ -40,7 +40,6 @@ export default function Forgot() {
 
   return (
     <>
-      {/* Back to Login Link */}
       <NavLink
         to="/login"
         className={({ isActive }) =>
@@ -65,7 +64,6 @@ export default function Forgot() {
         <span className="text-sm">Kembali ke Login</span>
       </NavLink>
 
-      {/* Header */}
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold">
           <span className="bg-gradient-to-r from-pink-500 to-pink-600 bg-clip-text text-transparent">
@@ -78,7 +76,6 @@ export default function Forgot() {
         </p>
       </div>
 
-      {/* Success Message */}
       {success && (
         <div className="flex items-center gap-2 bg-green-50 text-green-600 p-3 rounded-xl mb-6 text-sm border border-green-200 animate-fadeIn">
           <BsCheckCircleFill className="text-green-500 text-sm" />
@@ -89,7 +86,6 @@ export default function Forgot() {
         </div>
       )}
 
-      {/* Error Message */}
       {error && (
         <div className="flex items-center gap-2 bg-pink-50 text-pink-600 p-3 rounded-xl mb-6 text-sm border border-pink-200 animate-fadeIn">
           <BsFillExclamationDiamondFill className="text-pink-500 text-sm" />
@@ -98,7 +94,6 @@ export default function Forgot() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Email Field */}
         <div>
           <label className="block text-sm font-semibold text-pink-700 mb-2">
             Email
@@ -113,7 +108,6 @@ export default function Forgot() {
           />
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
           disabled={loading || success}
@@ -130,7 +124,6 @@ export default function Forgot() {
         </button>
       </form>
 
-      {/* Additional Info */}
       <p className="text-center text-xs text-pink-400 mt-6">
         Pastikan email yang Anda masukkan terdaftar di BlackGold Cherish
       </p>

@@ -47,7 +47,6 @@ export default function StatusProduksi() {
 
   return (
     <div className="min-h-screen bg-[#fffafb]">
-      {/* HERO HEADER */}
       <div className="kol-hero-header px-6 sm:px-10 py-10">
         <button onClick={() => navigate(-1)} className="mb-4 flex items-center gap-2 text-sm font-medium hover:opacity-70 transition-opacity" style={{ color: "#b8860b", fontFamily: "var(--font-cinzel,serif)" }}>
           ← Kembali
@@ -60,7 +59,6 @@ export default function StatusProduksi() {
         </p>
       </div>
 
-      {/* CARDS */}
       <div className="px-6 sm:px-10 pb-16 space-y-8">
         {orders.map((order) => {
           const doneCount = order.steps.filter(s => s.done).length;

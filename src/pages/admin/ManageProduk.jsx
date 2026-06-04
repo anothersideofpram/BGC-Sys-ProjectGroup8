@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-/* Dummy produk dengan feedback */
 const products = [
   {
     id: 1, name: "Blus Elegance", jenis: "Blus", harga: 285000, stok: 12,
@@ -39,7 +38,7 @@ export default function ManageProduk() {
   const navigate = useNavigate();
   const [tab, setTab] = useState("produk");
   const [prodList, setProdList] = useState(products);
-  const [selectedFb, setSelectedFb] = useState(null); // produk yang feedbacknya dilihat
+  const [selectedFb, setSelectedFb] = useState(null);
   const [addModal, setAddModal] = useState(false);
   const [newProd, setNewProd] = useState({ name: "", jenis: "Blus", harga: "", stok: "" });
 
@@ -56,7 +55,6 @@ export default function ManageProduk() {
 
   return (
     <div>
-      {/* Header */}
       <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
         <div>
           <h1 className="text-3xl font-bold" style={{ fontFamily: "var(--font-playfair,serif)", color: "#1a0a10" }}>Kelola Produk & Pesanan</h1>
@@ -67,7 +65,6 @@ export default function ManageProduk() {
         </button>
       </div>
 
-      {/* Tab */}
       <div className="flex gap-2 mb-6">
         {["produk", "feedback"].map(t => (
           <button key={t} onClick={() => setTab(t)}
@@ -79,7 +76,6 @@ export default function ManageProduk() {
         ))}
       </div>
 
-      {/* TAB PRODUK */}
       {tab === "produk" && (
         <div className="bg-white rounded-3xl border border-pink-100 overflow-hidden">
           <table className="w-full text-sm">
@@ -121,7 +117,6 @@ export default function ManageProduk() {
         </div>
       )}
 
-      {/* TAB FEEDBACK */}
       {tab === "feedback" && (
         <div className="space-y-6">
           {/* Filter produk */}
@@ -170,7 +165,6 @@ export default function ManageProduk() {
         </div>
       )}
 
-      {/* Modal Tambah Produk */}
       {addModal && (
         <div className="kol-modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setAddModal(false)}>
           <div className="bg-white rounded-3xl max-w-md w-full p-8" onClick={e => e.stopPropagation()}>

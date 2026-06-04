@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-/* ── DUMMY DATA ── */
 const cartItemsDummy = [
   { id: 1, name: "Blus Elegance", price: 450000, size: "M", qty: 1, note: "", jenis: "Blus" },
   { id: 2, name: "Gaun Cherish",  price: 1250000, size: "L", qty: 1, note: "", jenis: "Gaun" },
@@ -20,13 +19,11 @@ export default function OrderPage() {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  /* ─── KALKULASI JS ─── */
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
   const ppn      = subtotal * PPN_RATE;
   const total    = subtotal + ppn;
   const itemCount = cartItems.reduce((acc, item) => acc + item.qty, 0);
 
-  /* ─── HELPERS ─── */
   const updateItem = (id, field, value) =>
     setCartItems((prev) => prev.map((it) => it.id === id ? { ...it, [field]: value } : it));
 
@@ -56,7 +53,6 @@ export default function OrderPage() {
     }, 1200);
   };
 
-  /* ─── SUCCESS STATE ─── */
   if (submitted) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center px-6 py-20 text-center">
@@ -84,7 +80,6 @@ export default function OrderPage() {
 
   return (
     <div className="min-h-screen bg-[#fffafb]">
-      {/* HERO HEADER */}
       <div className="kol-hero-header px-6 sm:px-10 py-10">
         <button onClick={() => navigate(-1)} className="mb-4 flex items-center gap-2 text-sm font-medium transition-opacity hover:opacity-70" style={{ color: "#b8860b", fontFamily: "var(--font-cinzel,serif)" }}>
           ← Kembali
@@ -97,10 +92,8 @@ export default function OrderPage() {
         </p>
       </div>
 
-      {/* CONTENT */}
       <div className="px-6 sm:px-10 py-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
 
-        {/* ── KIRI: Item Pesanan ── */}
         <div>
           <h2 className="font-bold text-2xl mb-6" style={{ fontFamily: "var(--font-playfair,serif)", color: "#1a0a10" }}>
             Item Pesanan
@@ -126,7 +119,7 @@ export default function OrderPage() {
                     <button onClick={() => removeItem(item.id)} className="text-2xl text-gray-300 hover:text-red-400 transition-colors">×</button>
                   </div>
 
-                  {/* Qty */}
+
                   <div className="flex items-center gap-3 mb-4">
                     <span className="text-sm font-medium" style={{ color: "#2a1a1f" }}>Jumlah:</span>
                     <button onClick={() => updateQty(item.id, -1)} className="w-8 h-8 rounded-full border border-pink-200 text-pink-500 font-bold hover:bg-pink-50 transition-colors flex items-center justify-center">−</button>
@@ -137,7 +130,7 @@ export default function OrderPage() {
                     </span>
                   </div>
 
-                  {/* Size */}
+
                   <div className="mb-4">
                     <p className="text-sm font-medium mb-2" style={{ color: "#2a1a1f" }}>Ukuran</p>
                     <div className="flex flex-wrap gap-2">
@@ -173,7 +166,6 @@ export default function OrderPage() {
             </div>
           )}
 
-          {/* Ringkasan */}
           {cartItems.length > 0 && (
             <div className="mt-6 bg-white border border-pink-100 rounded-3xl p-6">
               <h3 className="font-bold text-lg mb-5" style={{ color: "#1a0a10", fontFamily: "var(--font-playfair,serif)" }}>
@@ -203,7 +195,6 @@ export default function OrderPage() {
           )}
         </div>
 
-        {/* ── KANAN: Form Informasi ── */}
         <div className="bg-white border border-pink-100 rounded-3xl p-8 h-fit">
           <h2 className="font-bold text-2xl mb-7" style={{ fontFamily: "var(--font-playfair,serif)", color: "#1a0a10" }}>
             Informasi Pemesanan
@@ -267,7 +258,6 @@ export default function OrderPage() {
               </div>
             </div>
 
-            {/* Estimasi waktu */}
             <div className="bg-amber-50 border border-amber-200 rounded-2xl px-5 py-4 text-sm">
               <p className="font-semibold mb-1" style={{ color: "#92600a" }}>⏱ Estimasi Waktu Produksi</p>
               <p style={{ color: "#7a5200" }}>
@@ -275,7 +265,6 @@ export default function OrderPage() {
               </p>
             </div>
 
-            {/* Catatan Umum */}
             <div>
               <label className="block text-sm font-medium mb-2" style={{ color: "#2a1a1f" }}>Catatan Umum (opsional)</label>
               <textarea
@@ -287,7 +276,6 @@ export default function OrderPage() {
               />
             </div>
 
-            {/* Tombol Submit */}
             <button
               onClick={handleSubmit}
               disabled={isSubmitting || cartItems.length === 0}

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-/* DATA */
 const products = [
   {
     id: 1,
@@ -94,12 +93,10 @@ const products = [
 
 const toRp = (n) => "Rp " + n.toLocaleString("id-ID");
 
-/* IMAGE */
 const ProductImage = ({ src, alt }) => {
   return <img src={src} alt={alt} className="w-full h-full object-cover" />;
 };
 
-/* PRODUCT MODAL */
 const ProductModal = ({ product, onClose, onRemove }) => {
   if (!product) return null;
 

@@ -46,7 +46,6 @@ export default function OrderDetail() {
 
   return (
     <div id="order-detail-container" className="p-6">
-      {/* Header */}
       <div className="flex items-start justify-between mb-6 flex-wrap gap-3">
         <div>
           <h1 className="text-3xl font-bold">Orders Detail</h1>
@@ -58,7 +57,6 @@ export default function OrderDetail() {
       </div>
 
       <div className="grid grid-cols-[1fr_320px] gap-5">
-        {/* LEFT */}
         <div>
           {/* Order Meta */}
           <div className="bg-white rounded-xl p-5 shadow-sm mb-5">
@@ -89,7 +87,6 @@ export default function OrderDetail() {
             </div>
           </div>
 
-          {/* Items */}
           <div className="bg-white rounded-xl p-5 shadow-sm mb-5">
             <p className="font-bold mb-4 text-sm">🧾 Item Pesanan</p>
             <table className="w-full text-sm">
@@ -130,13 +127,11 @@ export default function OrderDetail() {
             </div>
           </div>
 
-          {/* Note */}
           <div className="bg-white rounded-xl p-4 shadow-sm mb-5">
             <p className="font-bold text-sm mb-2">📝 Catatan Pesanan</p>
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-800">⚠️ {order.note}</div>
           </div>
 
-          {/* Timeline */}
           <div className="bg-white rounded-xl p-5 shadow-sm">
             <p className="font-bold text-sm mb-4">⏱️ Status Pesanan</p>
             <div className="relative">
@@ -159,7 +154,6 @@ export default function OrderDetail() {
           </div>
         </div>
 
-        {/* RIGHT */}
         <div>
           {/* Customer */}
           <div className="bg-white rounded-xl p-5 shadow-sm mb-5">
@@ -186,7 +180,6 @@ export default function OrderDetail() {
             ))}
           </div>
 
-          {/* Actions */}
           <div className="bg-white rounded-xl p-5 shadow-sm mb-5 space-y-2">
             <p className="font-bold text-sm mb-3">⚡ Aksi Pesanan</p>
             <button className="w-full py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-sm">✓ Tandai Selesai</button>
@@ -195,7 +188,6 @@ export default function OrderDetail() {
             <button className="w-full py-2.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-sm">🗑 Batalkan Pesanan</button>
           </div>
 
-          {/* Payment Summary */}
           <div className="bg-white rounded-xl p-5 shadow-sm">
             <p className="font-bold text-sm mb-3">💳 Ringkasan Pembayaran</p>
             {[

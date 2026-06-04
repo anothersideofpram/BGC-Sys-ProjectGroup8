@@ -52,12 +52,10 @@ export default function Login() {
 
   return (
     <>
-      {/* Welcome Message - sebelum card */}
       <p className="text-pink-600 text-base font-medium text-center mb-6">
         Selamat datang kembali
       </p>
 
-      {/* Card Login */}
       <div className="w-full">
         <div className="login-card-header text-center mb-8">
           <h2 className="text-2xl font-bold">
@@ -67,7 +65,6 @@ export default function Login() {
           </h2>
         </div>
 
-        {/* Error Message */}
         {error && (
           <div className="flex items-center gap-2 bg-pink-50 text-pink-600 p-3 rounded-xl mb-6 text-sm border border-pink-200">
             <BsFillExclamationDiamondFill className="text-pink-500 text-sm" />
@@ -76,7 +73,6 @@ export default function Login() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Email Field */}
           <div>
             <label className="block text-sm font-semibold text-pink-700 mb-2">
               Email
@@ -91,7 +87,6 @@ export default function Login() {
             />
           </div>
 
-          {/* Password Field */}
           <div>
             <label className="block text-sm font-semibold text-pink-700 mb-2">
               Password
@@ -106,7 +101,6 @@ export default function Login() {
             />
           </div>
 
-          {/* Remember Me & Forgot Password */}
           <div className="flex items-center justify-between">
             <label className="flex items-center gap-2 cursor-pointer group">
               <input
@@ -129,7 +123,6 @@ export default function Login() {
             </NavLink>
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
@@ -146,7 +139,6 @@ export default function Login() {
           </button>
         </form>
 
-        {/* Register Link */}
         <p className="text-center text-sm mt-6 text-pink-500">
           Belum punya akun?{" "}
           <NavLink
@@ -159,7 +151,6 @@ export default function Login() {
           </NavLink>
         </p>
 
-        {/* Divider */}
         <div className="flex items-center my-6">
           <div className="flex-grow border-t border-pink-100"></div>
           <span className="px-4 text-xs text-pink-400 font-medium bg-transparent">
@@ -168,7 +159,6 @@ export default function Login() {
           <div className="flex-grow border-t border-pink-100"></div>
         </div>
 
-        {/* Google Login */}
         <button
           type="button"
           onClick={handleGoogleLogin}

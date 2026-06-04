@@ -20,7 +20,6 @@ export default function GrafikPertumbuhan() {
 
   return (
     <div>
-      {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="p-3 bg-gradient-to-br from-amber-100 to-yellow-100 rounded-lg">
@@ -33,7 +32,6 @@ export default function GrafikPertumbuhan() {
         </div>
       </div>
 
-      {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="bg-white rounded-xl border border-gray-100 p-4">
           <p className="text-xs text-gray-400 mb-2">Total Pesanan</p>
@@ -52,13 +50,10 @@ export default function GrafikPertumbuhan() {
         </div>
       </div>
 
-      {/* Main Chart */}
       <div className="bg-white rounded-2xl border border-gray-100 p-8 mb-8">
         <h2 className="font-bold text-lg mb-2 text-gray-800">Pesanan Per Bulan</h2>
         <p className="text-sm text-gray-400 mb-6">Tren pesanan masuk selama 6 bulan</p>
 
-        {/* Bar Chart */}
-        <div className="flex items-end gap-2 h-56 border-b border-gray-100 pb-4 mb-6">
           {monthlyOrders.map((m) => {
             const pct = (m.count / maxCount) * 100;
             return (
@@ -84,8 +79,6 @@ export default function GrafikPertumbuhan() {
         </div>
       </div>
 
-      {/* Revenue Projection */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="bg-white rounded-2xl border border-gray-100 p-8">
           <h2 className="font-bold text-lg mb-2 text-gray-800">Proyeksi Pendapatan</h2>
           <p className="text-sm text-gray-400 mb-6">Estimasi berdasarkan rata-rata pesanan</p>
@@ -115,8 +108,6 @@ export default function GrafikPertumbuhan() {
           </div>
         </div>
 
-        {/* Growth Insights */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-8">
           <h2 className="font-bold text-lg mb-2 text-gray-800">Insights Pertumbuhan</h2>
           <p className="text-sm text-gray-400 mb-6">Analisis tren dan rekomendasi</p>
 
