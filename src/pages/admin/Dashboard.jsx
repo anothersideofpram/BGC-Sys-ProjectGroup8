@@ -1,93 +1,157 @@
 import { FaShoppingCart, FaTruck, FaBan, FaDollarSign } from "react-icons/fa";
-import PageHeader from "../../component/PageHeader";
+import { useNavigate } from "react-router-dom";
+import { MdArrowOutward } from "react-icons/md";
+
+const summaryCards = [
+  {
+    title: "Total Pesanan",
+    value: "75",
+    icon: FaShoppingCart,
+    bgColor: "bg-blue-100",
+    color: "text-blue-600",
+    link: "/orders"
+  },
+  {
+    title: "Pesanan Terkirim",
+    value: "58",
+    icon: FaTruck,
+    bgColor: "bg-green-100",
+    color: "text-green-600",
+    link: "/orders"
+  },
+  {
+    title: "Pesanan Batal",
+    value: "5",
+    icon: FaBan,
+    bgColor: "bg-red-100",
+    color: "text-red-600",
+    link: "/orders"
+  },
+  {
+    title: "Total Pendapatan",
+    value: "Rp 128M",
+    icon: FaDollarSign,
+    bgColor: "bg-purple-100",
+    color: "text-purple-600",
+    link: null
+  },
+];
+
+const quickStats = [
+  { label: "Pelanggan Aktif", value: "342", trend: "+8.2%" },
+  { label: "Produk Stok Rendah", value: "12", trend: "-3%" },
+  { label: "Feedback Baru", value: "24", trend: "+12%" },
+  { label: "Pesanan Hari Ini", value: "8", trend: "+5%" },
+];
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+
   return (
-    <div id="dashboard-container">
-      <PageHeader />
-      <div
-        id="dashboard-grid"
-        className="p-5 grid sm:grid-cols-2 md:grid-cols-4 gap-4"
-      >
+    <div>
+      {/* Quick Access Summary */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {summaryCards.map((card) => {
+          const IconComponent = card.icon;
+          return (
+            <div
+              key={card.title}
+              className={`bg-white rounded-xl border border-gray-100 p-5 cursor-pointer hover:shadow-lg transition-all ${
+                card.link ? "hover:border-gray-300" : ""
+              }`}
+              onClick={() => card.link && navigate(card.link)}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className={`${card.bgColor} p-3 rounded-lg`}>
+                  <IconComponent className={`text-lg ${card.color}`} />
+                </div>
+                {card.link && <MdArrowOutward className="text-gray-300 group-hover:text-gray-600" />}
+              </div>
+              <p className="text-sm text-gray-500 mb-1">{card.title}</p>
+              <p className="text-2xl font-bold text-gray-800">{card.value}</p>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Quick Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        {quickStats.map((stat) => (
+          <div key={stat.label} className="bg-white rounded-lg border border-gray-100 p-4">
+            <p className="text-xs text-gray-400 mb-2">{stat.label}</p>
+            <div className="flex items-end justify-between">
+              <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
+              <span className="text-xs text-green-600 font-semibold">{stat.trend}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Action Cards */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Kelola Pesanan */}
         <div
-          id="dashboard-orders"
-          className="flex items-center space-x-5 bg-white rounded-lg shadow-md p-4"
+          className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-200 p-6 cursor-pointer hover:shadow-lg hover:border-blue-300 transition-all"
+          onClick={() => navigate("/orders")}
         >
-          <div
-            id="orders-icon"
-            className="bg-kuning rounded-full p-4 text-3xl text-white"
-          >
-            <FaShoppingCart />
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-bold text-gray-800">Kelola Pesanan</h3>
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <FaShoppingCart className="text-blue-600" size={20} />
+            </div>
           </div>
-          <div id="orders-info" className="flex flex-col">
-            <span id="orders-count" className="text-2xl font-bold">
-              75
-            </span>
-            <span id="orders-text" className="text-gray-400">
-              Total Orders
-            </span>
-          </div>
+          <p className="text-sm text-gray-600 mb-4">
+            Lihat dan kelola semua pesanan pelanggan dengan status terkini
+          </p>
+          <button className="flex items-center gap-2 text-blue-600 font-medium text-sm hover:text-blue-700">
+            Buka <MdArrowOutward size={16} />
+          </button>
         </div>
 
+        {/* Kelola Produk */}
         <div
-          id="dashboard-delivered"
-          className="flex items-center space-x-5 bg-white rounded-lg shadow-md p-4"
+          className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl border border-green-200 p-6 cursor-pointer hover:shadow-lg hover:border-green-300 transition-all"
+          onClick={() => navigate("/manage-produk")}
         >
-          <div
-            id="delivered-icon"
-            className="bg-hijau rounded-full p-4 text-3xl text-white"
-          >
-            <FaTruck />
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-bold text-gray-800">Kelola Produk</h3>
+            <div className="p-2 bg-green-100 rounded-lg">
+              <FaShoppingCart className="text-green-600" size={20} />
+            </div>
           </div>
-          <div id="delivered-info" className="flex flex-col">
-            <span id="delivered-count" className="text-2xl font-bold">
-              175
-            </span>
-            <span id="delivered-text" className="text-gray-400">
-              Total Delivered
-            </span>
-          </div>
+          <p className="text-sm text-gray-600 mb-4">
+            Tambah, edit, atau hapus produk dari katalog toko Anda
+          </p>
+          <button className="flex items-center gap-2 text-green-600 font-medium text-sm hover:text-green-700">
+            Buka <MdArrowOutward size={16} />
+          </button>
         </div>
 
+        {/* Pantau Feedback */}
         <div
-          id="dashboard-canceled"
-          className="flex items-center space-x-5 bg-white rounded-lg shadow-md p-4"
+          className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl border border-purple-200 p-6 cursor-pointer hover:shadow-lg hover:border-purple-300 transition-all"
+          onClick={() => navigate("/feedback-admin")}
         >
-          <div
-            id="canceled-icon"
-            className="bg-merah rounded-full p-4 text-3xl text-white"
-          >
-            <FaBan />
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-bold text-gray-800">Pantau Feedback</h3>
+            <div className="p-2 bg-purple-100 rounded-lg">
+              <FaBan className="text-purple-600" size={20} />
+            </div>
           </div>
-          <div id="canceled-info" className="flex flex-col">
-            <span id="canceled-count" className="text-2xl font-bold">
-              40
-            </span>
-            <span id="canceled-text" className="text-gray-400">
-              Total Canceled
-            </span>
-          </div>
+          <p className="text-sm text-gray-600 mb-4">
+            Lihat review dan feedback pelanggan tentang produk Anda
+          </p>
+          <button className="flex items-center gap-2 text-purple-600 font-medium text-sm hover:text-purple-700">
+            Buka <MdArrowOutward size={16} />
+          </button>
         </div>
+      </div>
 
-        <div
-          id="dashboard-revenue"
-          className="flex items-center space-x-5 bg-white rounded-lg shadow-md p-4"
-        >
-          <div
-            id="revenue-icon"
-            className="bg-hijau rounded-full p-4 text-3xl text-white"
-          >
-            <FaDollarSign />
-          </div>
-          <div id="revenue-info" className="flex flex-col">
-            <span id="revenue-amount" className="text-2xl font-bold">
-              Rp.128.000.000
-            </span>
-            <span id="revenue-text" className="text-gray-400">
-              Total Revenue
-            </span>
-          </div>
-        </div>
+      {/* Info Box */}
+      <div className="mt-8 p-6 bg-gradient-to-r from-amber-50 to-yellow-50 rounded-xl border border-amber-200">
+        <p className="text-sm text-amber-900">
+          <span className="font-bold">💡 Tip:</span> Klik pada setiap item untuk melihat detail dan mengelola data Anda dengan lebih baik.
+        </p>
       </div>
     </div>
   );

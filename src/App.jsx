@@ -32,6 +32,8 @@ const AkunAdmin    = lazy(() => import("./pages/admin/AkunAdmin"));
 /* ── Owner ── */
 const OwnerDashboard = lazy(() => import("./pages/owner/Dashboard"));
 const AkunOwner      = lazy(() => import("./pages/owner/AkunOwner"));
+const OwnerGrafik    = lazy(() => import("./pages/owner/GrafikPertumbuhan"));
+const OwnerStatistik = lazy(() => import("./pages/owner/StatistikPelanggan"));
 
 export default function App() {
   return (
@@ -69,6 +71,8 @@ export default function App() {
         <Route element={<OwnerLayouts />}>
           <Route path="/owner-dashboard" element={<OwnerDashboard />} />
           <Route path="/akun-owner"       element={<AkunOwner />} />
+          <Route path="/owner-grafik"    element={<OwnerGrafik />} />
+          <Route path="/owner-statistik" element={<OwnerStatistik />} />
         </Route>
       </Routes>
     </Suspense>
