@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const products = [
   {
@@ -23,28 +22,27 @@ const products = [
       { user: "Putri N.", rating: 3, komentar: "Ukuran agak kecil dari ekspektasi.", tanggal: "1 Apr 2025" },
     ],
   },
-  { id: 4, name: "Gaun Midnight",      jenis: "Gaun",       harga: 620000, stok: 3, feedback: [] },
+  { id: 4, name: "Gaun Midnight",      jenis: "Gaun",       harga: 620000, stok: 3,  feedback: [] },
   { id: 5, name: "Baju Kurung Klasik", jenis: "Baju Kurung", harga: 420000, stok: 10, feedback: [] },
 ];
 
-const statusOpts = ["Tersedia", "Habis", "Pre-Order"];
 const toRp = (n) => "Rp " + n.toLocaleString("id-ID");
 const avgRating = (fb) => fb.length === 0 ? null : (fb.reduce((a, b) => a + b.rating, 0) / fb.length).toFixed(1);
-const Stars = ({ n }) => Array.from({ length: 5 }, (_, i) => (
-  <span key={i} style={{ color: i < Math.round(n) ? "#c9a227" : "#e5e7eb" }}>★</span>
-));
 
 export default function ManageProduk() {
-  const navigate = useNavigate();
-  const [tab, setTab] = useState("produk");
   const [prodList, setProdList] = useState(products);
-  const [selectedFb, setSelectedFb] = useState(null);
   const [addModal, setAddModal] = useState(false);
   const [newProd, setNewProd] = useState({ name: "", jenis: "Blus", harga: "", stok: "" });
 
   const handleAdd = () => {
     if (!newProd.name || !newProd.harga) return;
-    setProdList(prev => [...prev, { ...newProd, id: Date.now(), harga: Number(newProd.harga), stok: Number(newProd.stok), feedback: [] }]);
+    setProdList(prev => [...prev, {
+      ...newProd,
+      id: Date.now(),
+      harga: Number(newProd.harga),
+      stok: Number(newProd.stok),
+      feedback: [],
+    }]);
     setNewProd({ name: "", jenis: "Blus", harga: "", stok: "" });
     setAddModal(false);
   };
@@ -55,144 +53,134 @@ export default function ManageProduk() {
 
   return (
     <div>
+      {/* Page header */}
       <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
         <div>
-          <h1 className="text-3xl font-bold" style={{ fontFamily: "var(--font-playfair,serif)", color: "#1a0a10" }}>Kelola Produk & Pesanan</h1>
-          <p className="text-sm mt-1" style={{ color: "#a07080" }}>Manajemen data produk dan feedback pelanggan</p>
+          <h1 className="text-3xl font-bold" style={{ fontFamily: "var(--font-playfair,serif)", color: "#1a0a10" }}>
+            Kelola Produk
+          </h1>
+          <p className="text-sm mt-1" style={{ color: "#a07080" }}>
+            Manajemen data produk BlackGold Cherish
+          </p>
         </div>
-        <button onClick={() => setAddModal(true)} className="kol-btn-pesan px-6 py-3 rounded-full text-white text-sm font-semibold">
+        <button
+          onClick={() => setAddModal(true)}
+          className="kol-btn-pesan px-6 py-3 rounded-full text-white text-sm font-semibold"
+        >
           + Tambah Produk
         </button>
       </div>
 
-      <div className="flex gap-2 mb-6">
-        {["produk", "feedback"].map(t => (
-          <button key={t} onClick={() => setTab(t)}
-            className={`px-5 py-2.5 rounded-full text-sm font-medium capitalize transition-all ${
-              tab === t ? "kol-btn-pesan text-white" : "bg-white border border-pink-200 text-gray-600 hover:border-pink-400"
-            }`}>
-            {t === "produk" ? "📦 Produk" : "⭐ Feedback Produk"}
-          </button>
-        ))}
+      {/* Product table */}
+      <div className="bg-white rounded-3xl border border-pink-100 overflow-hidden">
+        <div className="overflow-x-auto">
+        <table className="w-full text-sm min-w-[600px]">
+          <thead>
+            <tr style={{ background: "rgba(255,240,246,0.7)", borderBottom: "1px solid #fce7f3" }}>
+              {["Produk", "Jenis", "Harga", "Stok", "Rating", "Aksi"].map(h => (
+                <th key={h} className="text-left px-5 py-4 font-semibold" style={{ color: "#1a0a10" }}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {prodList.map((p, i) => {
+              const avg = avgRating(p.feedback);
+              return (
+                <tr
+                  key={p.id}
+                  className={`border-b border-pink-50 hover:bg-pink-50/30 transition-colors ${i % 2 ? "bg-[#fffafb]" : ""}`}
+                >
+                  <td className="px-5 py-4 font-semibold" style={{ color: "#1a0a10" }}>{p.name}</td>
+                  <td className="px-5 py-4" style={{ color: "#6b4a58" }}>{p.jenis}</td>
+                  <td className="px-5 py-4 font-semibold" style={{ color: "#b8860b" }}>{toRp(p.harga)}</td>
+                  <td className="px-5 py-4">
+                    <span
+                      className="px-3 py-1 rounded-full text-xs font-semibold"
+                      style={{
+                        color: p.stok > 5 ? "#16a34a" : p.stok > 0 ? "#b8860b" : "#dc2626",
+                        background: p.stok > 5 ? "rgba(22,163,74,.1)" : p.stok > 0 ? "rgba(184,134,11,.1)" : "rgba(220,38,38,.1)",
+                      }}
+                    >
+                      {p.stok} unit
+                    </span>
+                  </td>
+                  <td className="px-5 py-4">
+                    {avg
+                      ? <span className="font-semibold" style={{ color: "#c9a227" }}>★ {avg}</span>
+                      : <span className="text-gray-300 text-xs">—</span>
+                    }
+                  </td>
+                  <td className="px-5 py-4">
+                    <button
+                      onClick={() => handleDelete(p.id)}
+                      className="text-xs font-semibold hover:opacity-70 transition-opacity"
+                      style={{ color: "#dc2626" }}
+                    >
+                      Hapus
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        </div>
       </div>
 
-      {tab === "produk" && (
-        <div className="bg-white rounded-3xl border border-pink-100 overflow-hidden">
-          <table className="w-full text-sm">
-            <thead>
-              <tr style={{ background: "rgba(255,240,246,0.7)", borderBottom: "1px solid #fce7f3" }}>
-                {["Produk", "Jenis", "Harga", "Stok", "Rating", "Aksi"].map(h => (
-                  <th key={h} className="text-left px-5 py-4 font-semibold" style={{ color: "#1a0a10" }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {prodList.map((p, i) => {
-                const avg = avgRating(p.feedback);
-                return (
-                  <tr key={p.id} className={`border-b border-pink-50 hover:bg-pink-50/30 transition-colors ${i % 2 ? "bg-[#fffafb]" : ""}`}>
-                    <td className="px-5 py-4 font-semibold" style={{ color: "#1a0a10" }}>{p.name}</td>
-                    <td className="px-5 py-4" style={{ color: "#6b4a58" }}>{p.jenis}</td>
-                    <td className="px-5 py-4 font-semibold" style={{ color: "#b8860b" }}>{toRp(p.harga)}</td>
-                    <td className="px-5 py-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${p.stok > 5 ? "" : p.stok > 0 ? "" : ""}`}
-                        style={{ color: p.stok > 5 ? "#16a34a" : p.stok > 0 ? "#b8860b" : "#dc2626", background: p.stok > 5 ? "rgba(22,163,74,.1)" : p.stok > 0 ? "rgba(184,134,11,.1)" : "rgba(220,38,38,.1)" }}>
-                        {p.stok} unit
-                      </span>
-                    </td>
-                    <td className="px-5 py-4">
-                      {avg ? <span className="font-semibold" style={{ color: "#c9a227" }}>★ {avg}</span> : <span className="text-gray-300 text-xs">—</span>}
-                    </td>
-                    <td className="px-5 py-4">
-                      <div className="flex gap-3">
-                        <button onClick={() => { setSelectedFb(p); setTab("feedback"); }} className="text-xs font-semibold hover:opacity-70 transition-opacity" style={{ color: "#b8860b" }}>Feedback</button>
-                        <button onClick={() => handleDelete(p.id)} className="text-xs font-semibold hover:opacity-70 transition-opacity" style={{ color: "#dc2626" }}>Hapus</button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {tab === "feedback" && (
-        <div className="space-y-6">
-          {/* Filter produk */}
-          <div className="flex flex-wrap gap-2">
-            <button onClick={() => setSelectedFb(null)}
-              className={`px-4 py-2 rounded-full text-xs font-semibold transition-all ${!selectedFb ? "kol-btn-pesan text-white" : "bg-white border border-pink-200 text-gray-600"}`}>
-              Semua Produk
-            </button>
-            {prodList.filter(p => p.feedback.length > 0).map(p => (
-              <button key={p.id} onClick={() => setSelectedFb(p)}
-                className={`px-4 py-2 rounded-full text-xs font-semibold transition-all ${selectedFb?.id === p.id ? "kol-btn-pesan text-white" : "bg-white border border-pink-200 text-gray-600"}`}>
-                {p.name}
-              </button>
-            ))}
-          </div>
-
-          {(selectedFb ? [selectedFb] : prodList.filter(p => p.feedback.length > 0)).map(prod => (
-            <div key={prod.id} className="bg-white rounded-3xl border border-pink-100 p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <p className="font-bold text-lg" style={{ color: "#1a0a10", fontFamily: "var(--font-playfair,serif)" }}>{prod.name}</p>
-                  <p className="text-sm" style={{ color: "#a07080" }}>{prod.feedback.length} ulasan · ★ {avgRating(prod.feedback)}</p>
-                </div>
-              </div>
-              <div className="space-y-4">
-                {prod.feedback.map((fb, i) => (
-                  <div key={i} className="border-b border-pink-50 pb-4 last:border-0 last:pb-0">
-                    <div className="flex items-center justify-between mb-1">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0" style={{ background: "linear-gradient(135deg,#e91e8c,#c9a227)" }}>
-                          {fb.user.charAt(0)}
-                        </div>
-                        <p className="text-sm font-semibold" style={{ color: "#1a0a10" }}>{fb.user}</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="text-sm"><Stars n={fb.rating} /></div>
-                        <span className="text-xs" style={{ color: "#a07080" }}>{fb.tanggal}</span>
-                      </div>
-                    </div>
-                    <p className="text-sm ml-11" style={{ color: "#6b4a58" }}>{fb.komentar}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
+      {/* Add product modal */}
       {addModal && (
-        <div className="kol-modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setAddModal(false)}>
+        <div
+          className="kol-modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4"
+          onClick={() => setAddModal(false)}
+        >
           <div className="bg-white rounded-3xl max-w-md w-full p-8" onClick={e => e.stopPropagation()}>
-            <h3 className="font-bold text-xl mb-6" style={{ fontFamily: "var(--font-playfair,serif)", color: "#1a0a10" }}>Tambah Produk Baru</h3>
+            <h3
+              className="font-bold text-xl mb-6"
+              style={{ fontFamily: "var(--font-playfair,serif)", color: "#1a0a10" }}
+            >
+              Tambah Produk Baru
+            </h3>
             <div className="space-y-4">
               {[
-                { label: "Nama Produk", key: "name", type: "text", placeholder: "Nama produk..." },
+                { label: "Nama Produk", key: "name",  type: "text",   placeholder: "Nama produk..." },
                 { label: "Harga (Rp)",  key: "harga", type: "number", placeholder: "285000" },
-                { label: "Stok",        key: "stok", type: "number", placeholder: "10" },
+                { label: "Stok",        key: "stok",  type: "number", placeholder: "10" },
               ].map(f => (
                 <div key={f.key}>
                   <label className="block text-sm font-medium mb-1.5" style={{ color: "#6b4a58" }}>{f.label}</label>
-                  <input type={f.type} placeholder={f.placeholder} value={newProd[f.key]}
+                  <input
+                    type={f.type}
+                    placeholder={f.placeholder}
+                    value={newProd[f.key]}
                     onChange={e => setNewProd({ ...newProd, [f.key]: e.target.value })}
-                    className="w-full border border-pink-200 rounded-2xl px-4 py-3 text-sm outline-none focus:border-pink-400" />
+                    className="w-full border border-pink-200 rounded-2xl px-4 py-3 text-sm outline-none focus:border-pink-400"
+                  />
                 </div>
               ))}
               <div>
                 <label className="block text-sm font-medium mb-1.5" style={{ color: "#6b4a58" }}>Jenis</label>
-                <select value={newProd.jenis} onChange={e => setNewProd({ ...newProd, jenis: e.target.value })}
-                  className="w-full border border-pink-200 rounded-2xl px-4 py-3 text-sm outline-none focus:border-pink-400">
+                <select
+                  value={newProd.jenis}
+                  onChange={e => setNewProd({ ...newProd, jenis: e.target.value })}
+                  className="w-full border border-pink-200 rounded-2xl px-4 py-3 text-sm outline-none focus:border-pink-400"
+                >
                   {["Blus", "Gaun", "Baju Kurung"].map(j => <option key={j}>{j}</option>)}
                 </select>
               </div>
             </div>
             <div className="flex gap-3 mt-7">
-              <button onClick={() => setAddModal(false)} className="flex-1 py-3 rounded-full border border-pink-200 text-sm font-semibold text-gray-600 hover:bg-pink-50 transition-colors">Batal</button>
-              <button onClick={handleAdd} className="flex-1 kol-btn-pesan py-3 rounded-full text-white text-sm font-semibold">Simpan</button>
+              <button
+                onClick={() => setAddModal(false)}
+                className="flex-1 py-3 rounded-full border border-pink-200 text-sm font-semibold text-gray-600 hover:bg-pink-50 transition-colors"
+              >
+                Batal
+              </button>
+              <button
+                onClick={handleAdd}
+                className="flex-1 kol-btn-pesan py-3 rounded-full text-white text-sm font-semibold"
+              >
+                Simpan
+              </button>
             </div>
           </div>
         </div>

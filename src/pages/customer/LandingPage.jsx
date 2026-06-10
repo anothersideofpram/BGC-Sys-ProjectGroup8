@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { FloralOrn, CornerOrn, GoldDivider, BrandStamp, DiamondPattern, Sparkles, HexGrid } from "../../component/Decorations";
 
 const collections = {
   blus: [
@@ -128,9 +129,6 @@ const SectionHeader = ({ eyebrow, title, desc }) => (
   </>
 );
 
-/* ══════════════════════════════════════
-   MAIN LANDING PAGE
-══════════════════════════════════════ */
 export default function LandingPage() {
   const navigate = useNavigate();
   const handleKoleksi = () => navigate("/koleksi");
@@ -188,7 +186,11 @@ export default function LandingPage() {
       </section>
 
       {/* ══ ABOUT ══ */}
-      <section className="max-w-[1100px] mx-auto px-5 py-18">
+      <section className="max-w-[1100px] mx-auto px-5 py-18 relative">
+        {/* Corner ornaments */}
+        <CornerOrn className="absolute top-2 left-2" opacity={0.15} size={70} />
+        <CornerOrn className="absolute top-2 right-2" opacity={0.15} size={70} style={{ transform: "scaleX(-1)" }} />
+
         <p
           className="font-[family-name:var(--font-cinzel)] text-[0.72rem] tracking-[0.3em] uppercase text-center mb-2 opacity-80"
           style={{ color: "#b8860b" }}
@@ -205,13 +207,24 @@ export default function LandingPage() {
 
         <div className="gold-divider" />
 
-        <p
-          className="font-[family-name:var(--font-cormorant)] text-center max-w-[640px] mx-auto leading-[1.85]"
-          style={{ fontSize: "1.05rem", color: "#5a3040" }}
-        >
-          BlackGold Cherish adalah butik fashion premium yang menghadirkan
-          koleksi pakaian wanita berkualitas tinggi.
-        </p>
+        {/* Decorative flanked paragraph */}
+        <div className="flex items-center gap-4 justify-center">
+          <FloralOrn size={56} opacity={0.22} color="#b8860b" className="shrink-0 hidden sm:block" />
+          <p
+            className="font-[family-name:var(--font-cormorant)] text-center max-w-[640px] mx-auto leading-[1.85]"
+            style={{ fontSize: "1.05rem", color: "#5a3040" }}
+          >
+            BlackGold Cherish adalah butik fashion premium yang menghadirkan
+            koleksi pakaian wanita berkualitas tinggi.
+          </p>
+          <FloralOrn size={56} opacity={0.22} color="#e91e8c" className="shrink-0 hidden sm:block" />
+        </div>
+
+        {/* Mini brand stamp below */}
+        <div className="flex flex-col items-center mt-6 gap-2">
+          <GoldDivider opacity={0.2} className="w-48" />
+          <BrandStamp opacity={0.2} />
+        </div>
       </section>
 
       {/* ══ KOLEKSI BLUS ══ */}
@@ -273,6 +286,12 @@ export default function LandingPage() {
       </div>
       {/* ══ CTA ══ */}
       <section className="relative overflow-hidden text-center px-5 py-20">
+        {/* Background decorations */}
+        <DiamondPattern className="absolute top-4 left-8" opacity={0.1} />
+        <DiamondPattern className="absolute top-4 right-8" opacity={0.1} />
+        <Sparkles className="absolute bottom-6 left-1/2 -translate-x-1/2" opacity={0.15} />
+        <HexGrid className="absolute bottom-2 right-4" opacity={0.08} size={130} />
+
         <h2
           className="text-gradient-section font-[family-name:var(--font-playfair)] font-bold mb-3.5 relative z-10"
           style={{ fontSize: "clamp(2rem, 5vw, 3.2rem)" }}

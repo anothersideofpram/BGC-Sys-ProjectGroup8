@@ -270,7 +270,7 @@ export default function Wishlist() {
       </div>
 
       {wishlist.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-28">
+        <div className="flex flex-col items-center justify-center py-28 px-6">
           <h2 className="text-3xl font-bold" style={{ color: "#1a0a10" }}>
             Wishlist Kosong
           </h2>
@@ -283,9 +283,10 @@ export default function Wishlist() {
           </button>
         </div>
       ) : (
-        <div className="max-w-7xl mx-auto">
-          <div className="kol-grid">
-            {wishlist.map((item) => (
+        <div className="px-6 sm:px-10 pb-16">
+          <div className="max-w-7xl mx-auto">
+            <div className="kol-grid">
+              {wishlist.map((item) => (
               <div
                 key={item.id}
                 className="kol-card group relative overflow-hidden"
@@ -349,6 +350,7 @@ export default function Wishlist() {
                 </div>
               </div>
             ))}
+          </div>
           </div>
         </div>
       )}

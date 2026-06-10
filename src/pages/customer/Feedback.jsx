@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { CornerOrn, FloralOrn, Sparkles, GoldDivider, BrandStamp, HexGrid } from "../../component/Decorations";
 
 const productFeedbacks = {
   "Blus Elegance": [
@@ -55,14 +56,17 @@ export default function Feedback() {
 
   return (
     <div className="min-h-screen bg-[#fffafb]">
-      <div className="kol-hero-header px-6 sm:px-10 py-10">
-        <button onClick={() => navigate(-1)} className="mb-4 flex items-center gap-2 text-sm font-medium hover:opacity-70 transition-opacity" style={{ color: "#b8860b", fontFamily: "var(--font-cinzel,serif)" }}>
+      <div className="kol-hero-header px-6 sm:px-10 py-10 relative overflow-hidden">
+        <CornerOrn className="absolute top-0 left-0" opacity={0.18} size={90} />
+        <CornerOrn className="absolute top-0 right-0" opacity={0.18} size={90} style={{ transform: "scaleX(-1)" }} />
+        <HexGrid className="absolute right-4 top-1" opacity={0.10} size={110} />
+        <button onClick={() => navigate(-1)} className="mb-4 flex items-center gap-2 text-sm font-medium hover:opacity-70 transition-opacity relative z-10" style={{ color: "#b8860b", fontFamily: "var(--font-cinzel,serif)" }}>
           ← Kembali
         </button>
-        <h1 className="font-bold text-4xl sm:text-5xl mb-2" style={{ color: "#b8860b", fontFamily: "var(--font-playfair,serif)" }}>
+        <h1 className="font-bold text-4xl sm:text-5xl mb-2 relative z-10" style={{ color: "#b8860b", fontFamily: "var(--font-playfair,serif)" }}>
           Ulasan Produk
         </h1>
-        <p className="text-sm" style={{ color: "#6b4a58" }}>
+        <p className="text-sm relative z-10" style={{ color: "#6b4a58" }}>
           Lihat ulasan pelanggan lain atau bagikan pengalaman Anda
         </p>
       </div>
@@ -193,6 +197,16 @@ export default function Feedback() {
             )}
           </div>
         )}
+
+        {/* Decorative bottom area */}
+        <div className="mt-10 flex flex-col items-center gap-2 pb-4">
+          <GoldDivider opacity={0.2} className="w-full max-w-md" />
+          <div className="flex items-center gap-6 mt-1">
+            <FloralOrn size={30} opacity={0.14} color="#e91e8c" />
+            <BrandStamp opacity={0.14} />
+            <FloralOrn size={30} opacity={0.14} />
+          </div>
+        </div>
       </div>
     </div>
   );

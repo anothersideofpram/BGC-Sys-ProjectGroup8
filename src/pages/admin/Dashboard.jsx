@@ -1,6 +1,7 @@
 import { FaShoppingCart, FaTruck, FaBan, FaDollarSign } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { MdArrowOutward } from "react-icons/md";
+import { GoldDivider, FloralOrn, DiamondPattern, BrandStamp } from "../../component/Decorations";
 
 const summaryCards = [
   {
@@ -83,6 +84,15 @@ export default function Dashboard() {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Decorative separator */}
+      <div className="flex items-center gap-4 my-2">
+        <FloralOrn size={28} opacity={0.2} />
+        <GoldDivider opacity={0.18} className="flex-1" />
+        <DiamondPattern opacity={0.12} className="w-16 h-16" />
+        <GoldDivider opacity={0.18} className="flex-1" />
+        <FloralOrn size={28} opacity={0.2} color="#e91e8c" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

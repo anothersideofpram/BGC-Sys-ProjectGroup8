@@ -2,8 +2,9 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SidebarOwner from "../component/SidebarOwner";
 import { Outlet } from "react-router-dom";
-import { FiBell, FiUser } from "react-icons/fi";
-import { getRole, getToken } from "../utils/auth";
+import { FiLogOut } from "react-icons/fi";
+import { getRole, getToken, clearAuth } from "../utils/auth";
+import MobileNav from "../component/MobileNav";
 
 export default function OwnerLayouts() {
   const navigate = useNavigate();
@@ -22,26 +23,35 @@ export default function OwnerLayouts() {
 
   return (
     <div className="bg-gray-50 min-h-screen flex">
-      <SidebarOwner />
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <header className="bg-white border-b border-gray-100 px-8 py-4 flex items-center justify-between shadow-sm">
-          <div>
-            <h1 className="text-lg font-semibold text-gray-800">Panel Pemilik Toko</h1>
-            <p className="text-xs text-gray-400 mt-1">Pantau pertumbuhan dan statistik bisnis Anda</p>
+      {/* Sidebar — hidden on mobile, visible on md+ */}
+      <div className="hidden md:block">
+        <SidebarOwner />
+      </div>
+
+      <div className="flex-1 flex flex-col h-screen overflow-hidden">
+        {/* Sticky Header */}
+        <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-sm border-b border-gray-100 px-4 sm:px-8 py-4 flex items-center justify-between shadow-sm shrink-0">
+          <div className="flex items-center gap-3">
+            {/* Hamburger — mobile only */}
+            <MobileNav role="owner" />
+            <div>
+              <h1 className="text-base sm:text-lg font-semibold text-gray-800">Panel Pemilik Toko</h1>
+              <p className="text-xs text-gray-400 mt-0.5 hidden sm:block">Pantau pertumbuhan dan statistik bisnis Anda</p>
+            </div>
           </div>
-          <div className="flex items-center gap-4">
-            <button className="p-2 hover:bg-gray-100 rounded-lg transition-all text-gray-600">
-              <FiBell size={20} />
-            </button>
-            <button className="p-2 hover:bg-gray-100 rounded-lg transition-all text-gray-600">
-              <FiUser size={20} />
-            </button>
-          </div>
+
+          {/* Logout button in header */}
+          <button
+            onClick={() => { clearAuth(); navigate("/login"); }}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50 border border-red-100 hover:border-red-200 transition-all duration-200"
+          >
+            <FiLogOut size={15} />
+            Keluar
+          </button>
         </header>
 
-        {/* Main Content */}
-        <main className="flex-1 p-8 overflow-auto">
+        {/* Scrollable Content */}
+        <main className="flex-1 p-8 overflow-y-auto">
           <Outlet />
         </main>
       </div>

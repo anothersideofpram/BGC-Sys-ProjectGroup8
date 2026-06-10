@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { CornerOrn, FloralOrn, Sparkles, GoldDivider, BrandStamp, BotanicalLine } from "../../component/Decorations";
 
 const statusConfig = {
   selesai:   { label: "Selesai",           color: "#16a34a", bg: "rgba(22,163,74,0.10)" },
@@ -23,14 +24,17 @@ export default function RiwayatPesanan() {
 
   return (
     <div className="min-h-screen bg-[#fffafb]">
-      <div className="kol-hero-header px-6 sm:px-10 py-10">
-        <button onClick={() => navigate(-1)} className="mb-4 flex items-center gap-2 text-sm font-medium hover:opacity-70 transition-opacity" style={{ color: "#b8860b", fontFamily: "var(--font-cinzel,serif)" }}>
+      <div className="kol-hero-header px-6 sm:px-10 py-10 relative overflow-hidden">
+        <CornerOrn className="absolute top-0 left-0" opacity={0.18} size={90} />
+        <CornerOrn className="absolute top-0 right-0" opacity={0.18} size={90} style={{ transform: "scaleX(-1)" }} />
+        <Sparkles className="absolute left-1/2 bottom-0" opacity={0.12} />
+        <button onClick={() => navigate(-1)} className="mb-4 flex items-center gap-2 text-sm font-medium hover:opacity-70 transition-opacity relative z-10" style={{ color: "#b8860b", fontFamily: "var(--font-cinzel,serif)" }}>
           ← Kembali
         </button>
-        <h1 className="font-bold text-4xl sm:text-5xl mb-2" style={{ color: "#b8860b", fontFamily: "var(--font-playfair,serif)" }}>
+        <h1 className="font-bold text-4xl sm:text-5xl mb-2 relative z-10" style={{ color: "#b8860b", fontFamily: "var(--font-playfair,serif)" }}>
           Riwayat Pesanan
         </h1>
-        <p className="text-sm" style={{ color: "#6b4a58" }}>
+        <p className="text-sm relative z-10" style={{ color: "#6b4a58" }}>
           Semua pesanan yang pernah Anda lakukan
         </p>
       </div>
@@ -49,7 +53,8 @@ export default function RiwayatPesanan() {
         </div>
 
         <div className="bg-white rounded-3xl border border-pink-100 overflow-hidden">
-          <table className="w-full text-sm">
+          <div className="overflow-x-auto">
+          <table className="w-full text-sm min-w-[640px]">
             <thead>
               <tr style={{ background: "rgba(255,240,246,0.7)", borderBottom: "1px solid #fce7f3" }}>
                 {["No. Pesanan", "Tanggal", "Produk", "Total", "Status", "Aksi"].map(h => (
@@ -81,6 +86,18 @@ export default function RiwayatPesanan() {
               })}
             </tbody>
           </table>
+          </div>
+        </div>
+
+        {/* Decorative footer area */}
+        <div className="mt-10 flex flex-col items-center gap-2">
+          <BotanicalLine width={280} opacity={0.2} />
+          <div className="flex items-center gap-6">
+            <FloralOrn size={32} opacity={0.15} color="#e91e8c" />
+            <BrandStamp opacity={0.15} />
+            <FloralOrn size={32} opacity={0.15} />
+          </div>
+          <GoldDivider opacity={0.2} className="w-64" />
         </div>
       </div>
 

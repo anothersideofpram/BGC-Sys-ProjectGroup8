@@ -5,12 +5,14 @@ import { BsFillExclamationDiamondFill } from "react-icons/bs";
 import { ImSpinner2 } from "react-icons/im";
 import { FcGoogle } from "react-icons/fc";
 import { setAuth, computeRole, getRole, getToken } from "../../utils/auth";
+import PanelSelector from "../../component/PanelSelector";
 
 export default function Login() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [showSelector, setShowSelector] = useState(false);
   const [dataForm, setDataForm] = useState({
     email: "",
     password: "",
@@ -20,10 +22,10 @@ export default function Login() {
     const token = getToken();
     const currentRole = getRole();
     if (token) {
-      if (currentRole === "admin") {
+      if (currentRole === "owner") {
+        setShowSelector(true); // owner sudah login → tampilkan selector
+      } else if (currentRole === "admin") {
         navigate("/dashboard");
-      } else if (currentRole === "owner") {
-        navigate("/owner-dashboard");
       } else {
         navigate("/");
       }
@@ -47,12 +49,12 @@ export default function Login() {
       const role = hardcodedAdmin ? "admin" : "owner";
       const token = hardcodedAdmin ? "admin-token" : "owner-token";
       setAuth({ token, role }, rememberMe);
-      if (role === "admin") {
-        navigate("/dashboard");
-      } else {
-        navigate("/owner-dashboard");
-      }
       setLoading(false);
+      if (role === "owner") {
+        setShowSelector(true); // tampilkan panel selector
+      } else {
+        navigate("/dashboard");
+      }
       return;
     }
 
@@ -64,10 +66,10 @@ export default function Login() {
       .then((response) => {
         const role = computeRole(dataForm.email);
         setAuth({ token: response.data.token, role }, rememberMe);
-        if (role === "admin") {
+        if (role === "owner") {
+          setShowSelector(true); // tampilkan panel selector
+        } else if (role === "admin") {
           navigate("/dashboard");
-        } else if (role === "owner") {
-          navigate("/owner-dashboard");
         } else {
           navigate("/");
         }
@@ -86,6 +88,11 @@ export default function Login() {
 
   return (
     <>
+      {/* Panel selector for owner */}
+      {showSelector && (
+        <PanelSelector onClose={() => setShowSelector(false)} />
+      )}
+
       <p className="text-pink-600 text-base font-medium text-center mb-6">
         Selamat datang kembali
       </p>

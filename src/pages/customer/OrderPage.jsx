@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { CornerOrn, FloralOrn, Sparkles, DiamondPattern, BrandStamp, GoldDivider } from "../../component/Decorations";
 
 const cartItemsDummy = [
   { id: 1, name: "Blus Elegance", price: 450000, size: "M", qty: 1, note: "", jenis: "Blus" },
@@ -80,14 +81,17 @@ export default function OrderPage() {
 
   return (
     <div className="min-h-screen bg-[#fffafb]">
-      <div className="kol-hero-header px-6 sm:px-10 py-10">
-        <button onClick={() => navigate(-1)} className="mb-4 flex items-center gap-2 text-sm font-medium transition-opacity hover:opacity-70" style={{ color: "#b8860b", fontFamily: "var(--font-cinzel,serif)" }}>
+      <div className="kol-hero-header px-6 sm:px-10 py-10 relative overflow-hidden">
+        <CornerOrn className="absolute top-0 left-0" opacity={0.18} size={90} />
+        <CornerOrn className="absolute top-0 right-0" opacity={0.18} size={90} style={{ transform: "scaleX(-1)" }} />
+        <DiamondPattern className="absolute left-1/2 bottom-0" opacity={0.1} />
+        <button onClick={() => navigate(-1)} className="mb-4 flex items-center gap-2 text-sm font-medium transition-opacity hover:opacity-70 relative z-10" style={{ color: "#b8860b", fontFamily: "var(--font-cinzel,serif)" }}>
           ← Kembali
         </button>
-        <h1 className="font-bold text-4xl sm:text-5xl mb-2" style={{ color: "#b8860b", fontFamily: "var(--font-playfair,serif)" }}>
+        <h1 className="font-bold text-4xl sm:text-5xl mb-2 relative z-10" style={{ color: "#b8860b", fontFamily: "var(--font-playfair,serif)" }}>
           Pre-Order
         </h1>
-        <p className="text-sm" style={{ color: "#6b4a58" }}>
+        <p className="text-sm relative z-10" style={{ color: "#6b4a58" }}>
           {itemCount} item · Total sementara {toRp(total)}
         </p>
       </div>

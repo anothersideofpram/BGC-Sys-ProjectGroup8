@@ -303,9 +303,6 @@ export default function Koleksi() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* ════════════════════════════
-          HERO HEADER
-      ════════════════════════════ */}
       <div className="kol-hero-header px-6 sm:px-10 py-10">
         <div className="max-w-7xl mx-auto text-center">
           <h1
@@ -322,13 +319,8 @@ export default function Koleksi() {
           </p>
         </div>
       </div>
-
-      {/* ════════════════════════════
-          SEARCH + FILTER
-      ════════════════════════════ */}
       <div className="px-6 sm:px-10 pb-16">
         <div className="max-w-7xl mx-auto">
-          {/* Search */}
           <div className="relative mb-5 mx-auto max-w-3xl">
             <input
               type="text"
@@ -353,7 +345,6 @@ export default function Koleksi() {
             </svg>
           </div>
 
-          {/* Filter chips */}
           <div className="flex flex-wrap gap-2.5 mb-7 justify-center">
             {filters.map((f) => (
               <button
@@ -366,10 +357,6 @@ export default function Koleksi() {
             ))}
           </div>
         </div>
-
-        {/* ════════════════════════════
-            PRODUCT GRID
-        ════════════════════════════ */}
         {filtered.length === 0 ? (
           <div className="text-center py-24" style={{ color: "#a07080" }}>
             <p
@@ -383,82 +370,79 @@ export default function Koleksi() {
           <>
             <div className="max-w-7xl mx-auto">
               <div className="kol-grid">
-              {filtered.map((product) => (
-              <div
-                key={product.id}
-                className="kol-card group relative overflow-hidden"
-              >
-                {/* Foto produk — tall portrait */}
-                <div className="kol-card-img relative overflow-hidden">
-                  <ProductImage src={product.image} alt={product.name} />
-
-                  {/* Wishlist toggle pojok kanan atas */}
-                  <button
-                    onClick={() => toggleWishlist(product.id)}
-                    className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/85 backdrop-blur-sm flex items-center justify-center shadow-sm transition-all duration-200 hover:scale-110 z-10"
+                {filtered.map((product) => (
+                  <div
+                    key={product.id}
+                    className="kol-card group relative overflow-hidden"
                   >
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill={
-                        wishlistIds.includes(product.id) ? "#dc143c" : "none"
-                      }
-                      stroke="#dc143c"
-                      strokeWidth="2.5"
-                    >
-                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                    </svg>
-                  </button>
+                    <div className="kol-card-img relative overflow-hidden">
+                      <ProductImage src={product.image} alt={product.name} />
 
-                  {/* Hover overlay dengan tombol */}
-                  <div className="kol-card-overlay absolute inset-0 flex items-end justify-center pb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <button
-                      onClick={() => setSelected(product)}
-                      className="kol-btn-detail px-6 py-2.5 rounded-full text-sm font-semibold text-white shadow-lg"
-                    >
-                      Lihat Detail
-                    </button>
+                      <button
+                        onClick={() => toggleWishlist(product.id)}
+                        className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/85 backdrop-blur-sm flex items-center justify-center shadow-sm transition-all duration-200 hover:scale-110 z-10"
+                      >
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill={
+                            wishlistIds.includes(product.id)
+                              ? "#dc143c"
+                              : "none"
+                          }
+                          stroke="#dc143c"
+                          strokeWidth="2.5"
+                        >
+                          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                        </svg>
+                      </button>
+
+                      <div className="kol-card-overlay absolute inset-0 flex items-end justify-center pb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button
+                          onClick={() => setSelected(product)}
+                          className="kol-btn-detail px-6 py-2.5 rounded-full text-sm font-semibold text-white shadow-lg"
+                        >
+                          Lihat Detail
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="pt-3 pb-1">
+                      <p
+                        className="font-semibold text-sm leading-tight mb-0.5 truncate"
+                        style={{ color: "#1a0a10" }}
+                      >
+                        {product.name}
+                      </p>
+                      <p
+                        className="text-xs mb-0.5"
+                        style={{ color: "#a07080" }}
+                      >
+                        {product.jenis}
+                      </p>
+                      <p
+                        className="text-xs font-semibold"
+                        style={{ color: "#b8860b" }}
+                      >
+                        {toRp(product.harga)}
+                      </p>
+
+                      <button
+                        onClick={() => setSelected(product)}
+                        className="kol-btn-detail-sm w-full mt-3 py-2 rounded-full text-xs font-semibold text-white sm:hidden"
+                      >
+                        Lihat Detail
+                      </button>
+                    </div>
                   </div>
-                </div>
-
-                {/* Info bawah card */}
-                <div className="pt-3 pb-1">
-                  <p
-                    className="font-semibold text-sm leading-tight mb-0.5 truncate"
-                    style={{ color: "#1a0a10" }}
-                  >
-                    {product.name}
-                  </p>
-                  <p className="text-xs mb-0.5" style={{ color: "#a07080" }}>
-                    {product.jenis}
-                  </p>
-                  <p
-                    className="text-xs font-semibold"
-                    style={{ color: "#b8860b" }}
-                  >
-                    {toRp(product.harga)}
-                  </p>
-
-                  {/* Tombol Lihat Detail (selalu tampil di mobile) */}
-                  <button
-                    onClick={() => setSelected(product)}
-                    className="kol-btn-detail-sm w-full mt-3 py-2 rounded-full text-xs font-semibold text-white sm:hidden"
-                  >
-                    Lihat Detail
-                  </button>
-                </div>
-              </div>
-            ))}
+                ))}
               </div>
             </div>
           </>
         )}
-        </div>
+      </div>
 
-      {/* ════════════════════════════
-          MODAL DETAIL
-      ════════════════════════════ */}
       <ProductModal
         product={selected}
         onClose={() => setSelected(null)}

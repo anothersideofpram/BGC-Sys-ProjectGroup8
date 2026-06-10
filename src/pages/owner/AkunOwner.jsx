@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { clearAuth } from "../../utils/auth";
+import { FloralOrn, DiamondPattern, GoldDivider, BrandStamp, HexGrid, Sparkles } from "../../component/Decorations";
 
 const owner = { nama: "Budi Santoso", email: "owner@blackgoldcherish.com", telepon: "081387654321", role: "Owner", joinDate: "Januari 2023" };
 
@@ -13,7 +14,9 @@ export default function AkunOwner() {
   const handleSave = () => { setSaved(true); setEditing(false); setTimeout(() => setSaved(false), 2500); };
 
   return (
-    <div>
+    <div className="flex flex-col lg:flex-row gap-8 items-start">
+      {/* ─── Left: form ─── */}
+      <div className="flex-1">
       <div className="mb-8">
         <h1 className="text-3xl font-bold" style={{ fontFamily: "var(--font-playfair,serif)", color: "#1a0a10" }}>Profil Owner</h1>
         <p className="text-sm mt-1" style={{ color: "#a07080" }}>Kelola informasi akun Anda</p>
@@ -43,7 +46,6 @@ export default function AkunOwner() {
         <div className="space-y-5">
           {[
             { label: "Nama Lengkap", key: "nama",    type: "text" },
-            { label: "Email",        key: "email",   type: "email" },
             { label: "No. Telepon",  key: "telepon", type: "tel" },
           ].map(({ label, key, type }) => (
             <div key={key}>
@@ -54,6 +56,15 @@ export default function AkunOwner() {
                 : <p className="px-5 py-3 text-sm rounded-2xl" style={{ background: "#fffdf5", color: "#1a0a10" }}>{form[key]}</p>}
             </div>
           ))}
+
+          {/* Email — selalu read-only */}
+          <div>
+            <label className="flex items-center gap-1.5 text-sm font-medium mb-1.5" style={{ color: "#6b4a58" }}>
+              Email
+              <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ background: "rgba(107,114,128,.10)", color: "#6b7280" }}>🔒 Tidak dapat diubah</span>
+            </label>
+            <p className="px-5 py-3 text-sm rounded-2xl" style={{ background: "#f3f4f6", color: "#6b7280" }}>{form.email}</p>
+          </div>
           <div>
             <label className="block text-sm font-medium mb-1.5" style={{ color: "#6b4a58" }}>Bergabung Sejak</label>
             <p className="px-5 py-3 text-sm rounded-2xl" style={{ background: "#fffdf5", color: "#1a0a10" }}>{owner.joinDate}</p>
@@ -64,6 +75,37 @@ export default function AkunOwner() {
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
           Keluar dari Akun
         </button>
+        </div>
+      </div>
+
+      {/* ─── Right: decorative panel ─── */}
+      <div
+        className="hidden lg:flex flex-col items-center justify-center gap-5 rounded-3xl p-8 w-72 shrink-0"
+        style={{
+          background: "linear-gradient(135deg, rgba(255,252,230,0.5) 0%, rgba(255,250,241,0.8) 100%)",
+          border: "1px solid rgba(201,162,39,0.25)",
+          minHeight: 400,
+        }}
+      >
+        <FloralOrn size={80} opacity={0.35} color="#c9a227" />
+        <GoldDivider opacity={0.35} className="w-full" />
+        <DiamondPattern opacity={0.22} color="#c9a227" className="my-1" />
+        <BrandStamp opacity={0.5} />
+        <GoldDivider opacity={0.35} className="w-full" />
+        <HexGrid opacity={0.15} color="#c9a227" size={100} />
+        <Sparkles opacity={0.2} color="#c9a227" className="-mt-2" />
+        <p
+          className="text-center text-xs mt-2"
+          style={{
+            fontFamily: "var(--font-cormorant, serif)",
+            fontStyle: "italic",
+            color: "#a07060",
+            lineHeight: 1.7,
+            maxWidth: 200,
+          }}
+        >
+          "Memimpin dengan visi, berkembang dengan integritas."
+        </p>
       </div>
     </div>
   );

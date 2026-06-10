@@ -56,7 +56,7 @@ export default function OrderDetail() {
         </button>
       </div>
 
-      <div className="grid grid-cols-[1fr_320px] gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5">
         <div>
           {/* Order Meta */}
           <div className="bg-white rounded-xl p-5 shadow-sm mb-5">

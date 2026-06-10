@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { CornerOrn, FloralOrn, Sparkles, GoldDivider, BrandStamp, DiamondPattern } from "../../component/Decorations";
 
 const orders = [
   {
@@ -47,14 +48,17 @@ export default function StatusProduksi() {
 
   return (
     <div className="min-h-screen bg-[#fffafb]">
-      <div className="kol-hero-header px-6 sm:px-10 py-10">
-        <button onClick={() => navigate(-1)} className="mb-4 flex items-center gap-2 text-sm font-medium hover:opacity-70 transition-opacity" style={{ color: "#b8860b", fontFamily: "var(--font-cinzel,serif)" }}>
+      <div className="kol-hero-header px-6 sm:px-10 py-10 relative overflow-hidden">
+        <CornerOrn className="absolute top-0 left-0" opacity={0.18} size={90} />
+        <CornerOrn className="absolute top-0 right-0" opacity={0.18} size={90} style={{ transform: "scaleX(-1)" }} />
+        <DiamondPattern className="absolute right-16 top-2" opacity={0.12} />
+        <button onClick={() => navigate(-1)} className="mb-4 flex items-center gap-2 text-sm font-medium hover:opacity-70 transition-opacity relative z-10" style={{ color: "#b8860b", fontFamily: "var(--font-cinzel,serif)" }}>
           ← Kembali
         </button>
-        <h1 className="font-bold text-4xl sm:text-5xl mb-2" style={{ color: "#b8860b", fontFamily: "var(--font-playfair,serif)" }}>
+        <h1 className="font-bold text-4xl sm:text-5xl mb-2 relative z-10" style={{ color: "#b8860b", fontFamily: "var(--font-playfair,serif)" }}>
           Status Produksi
         </h1>
-        <p className="text-sm" style={{ color: "#6b4a58" }}>
+        <p className="text-sm relative z-10" style={{ color: "#6b4a58" }}>
           Pantau progres produksi pesanan Anda secara real-time
         </p>
       </div>
@@ -118,6 +122,16 @@ export default function StatusProduksi() {
             </div>
           );
         })}
+      </div>
+
+      {/* Decorative bottom band */}
+      <div className="px-6 sm:px-10 pb-10 flex flex-col items-center gap-3">
+        <GoldDivider opacity={0.2} className="w-full max-w-md" />
+        <div className="flex items-center gap-6">
+          <FloralOrn size={30} opacity={0.14} />
+          <BrandStamp opacity={0.14} />
+          <FloralOrn size={30} opacity={0.14} color="#e91e8c" />
+        </div>
       </div>
     </div>
   );
