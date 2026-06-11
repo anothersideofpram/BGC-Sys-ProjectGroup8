@@ -171,7 +171,11 @@ export default function MainLayout() {
         <Outlet />
       </div>
 
-      {!isLanding && <Footer />}
+      {!isLanding && (
+        <div className="hidden sm:block">
+          <Footer />
+        </div>
+      )}
 
       {/* ── Mobile Bottom Navigation Bar (hidden on desktop) ── */}
       {!isLanding && (
