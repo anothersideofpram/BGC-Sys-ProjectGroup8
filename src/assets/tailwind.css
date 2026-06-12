@@ -195,9 +195,9 @@
 .kol-chip { border: 1.5px solid #2a1a1f; color: #2a1a1f; background: transparent; cursor: pointer; }
 .kol-chip:hover { border-color: #e879a0; color: #e879a0; }
 .kol-chip--active {
-  background: #e879a0;
-  border-color: #e879a0;
-  color: #fff;
+  background: #e879a0 !important;
+  border-color: #e879a0 !important;
+  color: #fff !important;
   box-shadow: 0 2px 12px rgba(232,121,160,0.35);
 }
 

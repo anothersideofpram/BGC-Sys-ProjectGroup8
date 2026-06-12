@@ -40,15 +40,6 @@ export default function AdminLayouts() {
               <p className="text-xs text-gray-400 mt-0.5 hidden sm:block">Kelola bisnis BlackGold Cherish Anda</p>
             </div>
           </div>
-
-          
-          <button
-            onClick={() => { clearAuth(); navigate("/login"); }}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50 border border-red-100 hover:border-red-200 transition-all duration-200"
-          >
-            <FiLogOut size={15} />
-            Keluar
-          </button>
         </header>
 
         

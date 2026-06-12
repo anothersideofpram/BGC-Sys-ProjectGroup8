@@ -113,6 +113,20 @@ export default function LandingPage() {
 
   const handleKoleksi = () => navigate("/koleksi");
 
+  const handleScrollToAbout = () => {
+    const element = document.getElementById("about-section");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handleHubungiKami = () => {
+    window.open(
+      "https://wa.me/6281234567890?text=Halo%20BlackGold%20Cherish,%20saya%20ingin%20berkonsultasi%20mengenai%20gaya%20personal%20saya.",
+      "_blank"
+    );
+  };
+
   return (
     <div
       className="min-h-screen overflow-x-hidden"
@@ -166,7 +180,7 @@ export default function LandingPage() {
       </section>
 
       
-      <section className="max-w-[1100px] mx-auto px-5 py-18 relative">
+      <section id="about-section" className="max-w-[1100px] mx-auto px-5 py-18 relative">
         
         <CornerOrn className="absolute top-2 left-2" opacity={0.15} size={70} />
         <CornerOrn className="absolute top-2 right-2" opacity={0.15} size={70} style={{ transform: "scaleX(-1)" }} />
@@ -278,11 +292,11 @@ export default function LandingPage() {
             Koleksi Kami
           </button>
           <button
-            onClick={handleKoleksi}
+            onClick={handleHubungiKami}
             className="btn-outline-cherry inline-block px-10 py-3.5 rounded-[40px] cursor-pointer font-[family-name:var(--font-cinzel)] text-sm font-semibold tracking-[0.15em] uppercase"
             style={{ color: "#8b4050" }}
           >
-            Lihat Kami
+            Hubungi Kami
           </button>
         </div>
       </section>

@@ -52,13 +52,12 @@ export default function PanelSelector({ onClose }) {
   };
 
   return (
-    
     <div
-      className="fixed inset-0 z-[999] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[999] flex items-center justify-center p-4 overflow-y-auto"
       style={{ background: "rgba(10,5,15,0.75)", backdropFilter: "blur(6px)" }}
     >
       <div
-        className="w-full max-w-2xl rounded-3xl overflow-hidden"
+        className="w-full max-w-2xl rounded-3xl overflow-hidden my-auto"
         style={{
           background: "linear-gradient(135deg, #1a0a10 0%, #2d1420 60%, #1a0a10 100%)",
           border: "1px solid rgba(184,134,11,0.25)",
@@ -66,10 +65,10 @@ export default function PanelSelector({ onClose }) {
         }}
       >
         
-        <div className="px-8 pt-8 pb-6 text-center border-b" style={{ borderColor: "rgba(184,134,11,0.15)" }}>
-          <div className="text-4xl mb-3">👑</div>
+        <div className="px-6 pt-6 pb-4 sm:px-8 sm:pt-8 sm:pb-6 text-center border-b" style={{ borderColor: "rgba(184,134,11,0.15)" }}>
+          <div className="text-3xl sm:text-4xl mb-2 sm:mb-3">👑</div>
           <h2
-            className="text-2xl font-bold mb-1"
+            className="text-xl sm:text-2xl font-bold mb-1"
             style={{
               fontFamily: "var(--font-playfair, serif)",
               background: "linear-gradient(90deg, #b8860b, #e8c862, #b8860b)",
@@ -80,18 +79,18 @@ export default function PanelSelector({ onClose }) {
           >
             Selamat Datang, Owner
           </h2>
-          <p className="text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
+          <p className="text-xs sm:text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
             Pilih panel yang ingin Anda akses
           </p>
         </div>
 
         
-        <div className="p-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="p-4 sm:p-6 flex flex-col sm:grid sm:grid-cols-3 gap-3 sm:gap-4">
           {panels.map((panel) => (
             <button
               key={panel.id}
               onClick={() => handleSelect(panel.path)}
-              className="group relative flex flex-col items-center gap-3 p-6 rounded-2xl text-center transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02]"
+              className="group relative flex flex-row sm:flex-col items-center sm:text-center p-3.5 sm:p-6 gap-4 sm:gap-3 rounded-xl sm:rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] text-left"
               style={{
                 background: "rgba(255,255,255,0.04)",
                 border: `1px solid ${panel.border}`,
@@ -100,49 +99,57 @@ export default function PanelSelector({ onClose }) {
             >
               
               <div
-                className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                className="absolute inset-0 rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
                 style={{ background: `radial-gradient(circle at center, ${panel.glow} 0%, transparent 70%)` }}
               />
 
               
               <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shrink-0 relative z-10"
+                className="w-11 h-11 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center text-xl sm:text-2xl shrink-0 relative z-10"
                 style={{ background: panel.gradient, boxShadow: `0 8px 24px ${panel.glow}` }}
               >
                 {panel.icon}
               </div>
 
               
-              <span
-                className="text-[10px] font-bold px-2.5 py-1 rounded-full relative z-10"
-                style={{ color: panel.badgeColor, background: panel.badgeBg, border: `1px solid ${panel.border}` }}
-              >
-                {panel.badge}
-              </span>
+              <div className="flex-1 min-w-0 relative z-10 flex flex-col items-start sm:items-center">
+                <span
+                  className="hidden sm:inline-block text-[10px] font-bold px-2.5 py-1 rounded-full mb-2"
+                  style={{ color: panel.badgeColor, background: panel.badgeBg, border: `1px solid ${panel.border}` }}
+                >
+                  {panel.badge}
+                </span>
 
-              
-              <div className="relative z-10">
-                <p className="font-bold text-sm mb-1" style={{ color: "rgba(255,255,255,0.9)" }}>
-                  {panel.title}
-                </p>
-                <p className="text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.4)" }}>
+                <div className="flex items-center gap-2">
+                  <p className="font-bold text-sm sm:text-base" style={{ color: "rgba(255,255,255,0.9)" }}>
+                    {panel.title}
+                  </p>
+                  <span
+                    className="sm:hidden text-[8px] font-bold px-1.5 py-0.5 rounded"
+                    style={{ color: panel.badgeColor, background: panel.badgeBg, border: `1px solid ${panel.border}` }}
+                  >
+                    {panel.badge}
+                  </span>
+                </div>
+
+                <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.4)" }}>
                   {panel.subtitle}
                 </p>
               </div>
 
               
               <div
-                className="mt-1 text-xs font-medium opacity-0 group-hover:opacity-100 transition-all duration-200 translate-y-1 group-hover:translate-y-0 relative z-10"
+                className="text-xs font-medium sm:opacity-0 group-hover:opacity-100 transition-all duration-200 sm:translate-y-1 group-hover:translate-y-0 relative z-10 shrink-0"
                 style={{ color: panel.badgeColor }}
               >
-                Buka →
+                <span className="hidden sm:inline">Buka </span>→
               </div>
             </button>
           ))}
         </div>
 
         
-        <div className="px-8 pb-6 text-center space-y-3">
+        <div className="px-6 pb-5 sm:px-8 sm:pb-6 text-center space-y-2 sm:space-y-3">
           <button
             onClick={onClose}
             className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2 rounded-full transition-all duration-200"
@@ -156,7 +163,7 @@ export default function PanelSelector({ onClose }) {
           >
             ← Kembali ke Login
           </button>
-          <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.2)" }}>
+          <p className="text-[10px] sm:text-[11px]" style={{ color: "rgba(255,255,255,0.2)" }}>
             ✦ BlackGold Cherish — Owner memiliki akses penuh ke semua panel ✦
           </p>
         </div>

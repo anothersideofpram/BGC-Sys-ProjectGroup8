@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { NavLink, useNavigate } from "react-router-dom";
 import { MdDashboard, MdInventory2, MdBarChart } from "react-icons/md";
 import { TbFileDescription, TbMessageStar, TbChartLine, TbUsers } from "react-icons/tb";
@@ -50,7 +51,7 @@ export default function MobileNav({ role = "admin" }) {
       </button>
 
       
-      {open && (
+      {open && createPortal(
         <div
           className="fixed inset-0 z-50 md:hidden"
           onClick={() => setOpen(false)}
@@ -116,7 +117,8 @@ export default function MobileNav({ role = "admin" }) {
               © 2023 BlackGold Cherish
             </p>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

@@ -1,9 +1,11 @@
 import { MdDashboard, MdInventory2 } from "react-icons/md";
 import { TbFileDescription, TbMessageStar } from "react-icons/tb";
-import { FiUsers, FiUser } from "react-icons/fi";
-import { NavLink } from "react-router-dom";
+import { FiUsers, FiUser, FiLogOut } from "react-icons/fi";
+import { NavLink, useNavigate } from "react-router-dom";
+import { clearAuth } from "../utils/auth";
 
 export default function Sidebar({ role = "admin" }) {
+  const navigate = useNavigate();
 
   const menuClass = ({ isActive }) =>
     `flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
@@ -72,7 +74,15 @@ export default function Sidebar({ role = "admin" }) {
         </div>
       </nav>
 
-      <p className="text-[10px] text-gray-300 text-center mt-6">
+      <button
+        onClick={() => { clearAuth(); navigate("/login"); }}
+        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-red-500 hover:bg-red-50 transition-all duration-200 font-medium mt-auto"
+      >
+        <FiLogOut className="text-lg shrink-0" />
+        <span>Keluar dari Akun</span>
+      </button>
+
+      <p className="text-[10px] text-gray-300 text-center mt-4">
         © 2023 BlackGold Cherish
       </p>
     </div>
