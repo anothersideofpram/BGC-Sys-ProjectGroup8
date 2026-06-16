@@ -77,9 +77,26 @@ export default function Login() {
 
     const user = data.user;
     
-    setAuth({ token: user.id, role: "customer" }, rememberMe);
+    // Fetch role from the users table in database
+    const { data: dbUser } = await supabase
+      .from("users")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    const userRole = dbUser?.role || "customer";
+
+    setAuth({ token: user.id, role: userRole }, rememberMe);
+    sessionStorage.setItem("welcomeToast", JSON.stringify({ role: userRole }));
     setLoading(false);
-    navigate("/");
+
+    if (userRole === "owner") {
+      setShowSelector(true);
+    } else if (userRole === "admin") {
+      navigate("/dashboard");
+    } else {
+      navigate("/");
+    }
   };
 
   const handleGoogleLogin = async () => {

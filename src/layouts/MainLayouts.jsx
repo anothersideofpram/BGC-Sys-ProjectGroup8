@@ -1,4 +1,4 @@
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Outlet, useNavigate, useLocation, Link } from "react-router-dom";
 import {
   LuTag,
   LuShoppingCart,
@@ -51,6 +51,23 @@ function Footer() {
       >
         © 2023 BlackGold Cherish. All rights reserved.
       </p>
+      <div className="mt-3 flex items-center justify-center gap-4">
+        <Link
+          to="/terms"
+          className="text-[10px] underline underline-offset-2 hover:opacity-80 transition-opacity"
+          style={{ color: "rgba(184,134,11,0.6)" }}
+        >
+          Syarat &amp; Ketentuan
+        </Link>
+        <span style={{ color: "rgba(255,255,255,0.15)" }}>·</span>
+        <Link
+          to="/feedback"
+          className="text-[10px] underline underline-offset-2 hover:opacity-80 transition-opacity"
+          style={{ color: "rgba(184,134,11,0.6)" }}
+        >
+          Hubungi Kami
+        </Link>
+      </div>
     </footer>
   );
 }

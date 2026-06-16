@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
-import { setAuth } from "../../utils/auth";
+import { setAuth, computeRole } from "../../utils/auth";
 
 export default function AuthCallback() {
   const navigate = useNavigate();
@@ -38,17 +38,44 @@ export default function AuthCallback() {
 
       const user = data.user;
 
-      await supabase.from("users").upsert({
-        id:         user.id,
-        nama:       user.user_metadata?.full_name || user.user_metadata?.name || "",
-        email:      user.email,
-        avatar_url: user.user_metadata?.avatar_url || "",
-        provider:   "google",
-        role:       "customer",
-      }, { onConflict: "id" });
+      // Check if user already exists
+      const { data: dbUser } = await supabase
+        .from("users")
+        .select("role")
+        .eq("id", user.id)
+        .single();
 
-      setAuth({ token: user.id, role: "customer" }, true);
-      navigate("/", { replace: true });
+      let userRole = dbUser?.role;
+
+      if (!userRole) {
+        userRole = computeRole(user.email);
+        await supabase.from("users").insert({
+          id:         user.id,
+          nama:       user.user_metadata?.full_name || user.user_metadata?.name || "",
+          email:      user.email,
+          avatar_url: user.user_metadata?.avatar_url || "",
+          provider:   "google",
+          role:       userRole,
+        });
+      } else {
+        await supabase.from("users").update({
+          nama:       user.user_metadata?.full_name || user.user_metadata?.name || "",
+          email:      user.email,
+          avatar_url: user.user_metadata?.avatar_url || "",
+          provider:   "google",
+        }).eq("id", user.id);
+      }
+
+      setAuth({ token: user.id, role: userRole }, true);
+      sessionStorage.setItem("welcomeToast", JSON.stringify({ role: userRole }));
+      
+      if (userRole === "owner") {
+        navigate("/login", { replace: true });
+      } else if (userRole === "admin") {
+        navigate("/dashboard", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
     };
 
     handleCallback();
