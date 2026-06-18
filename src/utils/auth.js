@@ -23,9 +23,8 @@ export function clearAuth() {
   sessionStorage.removeItem("userRole");
 }
 
-export function computeRole(email) {
-  const lower = (email || "").toLowerCase();
-  if (lower.includes("admin")) return "admin";
-  if (lower.includes("owner")) return "owner";
+// Role untuk semua user baru via Google OAuth selalu 'customer'.
+// Role hanya bisa diubah langsung di database oleh superadmin.
+export function getDefaultRole() {
   return "customer";
 }

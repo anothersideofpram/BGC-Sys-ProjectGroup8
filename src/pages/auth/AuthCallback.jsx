@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
-import { setAuth, computeRole } from "../../utils/auth";
+import { setAuth, getDefaultRole } from "../../utils/auth";
 
 export default function AuthCallback() {
   const navigate = useNavigate();
@@ -48,7 +48,8 @@ export default function AuthCallback() {
       let userRole = dbUser?.role;
 
       if (!userRole) {
-        userRole = computeRole(user.email);
+        // User baru Google OAuth → SELALU customer, terlepas dari nama/email
+        userRole = getDefaultRole();
         await supabase.from("users").insert({
           id:         user.id,
           nama:       user.user_metadata?.full_name || user.user_metadata?.name || "",
