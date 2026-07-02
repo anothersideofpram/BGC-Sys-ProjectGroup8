@@ -265,20 +265,57 @@ export default function ManageProduk() {
                     </td>
 
                     <td className="px-5 py-4">
-                      <div className="flex flex-col gap-1.5">
+                      <div className="flex items-center gap-2">
                         <button
                           onClick={() => openEdit(p)}
-                          className="text-xs font-semibold hover:opacity-70 transition-opacity"
-                          style={{ color: "#b8860b" }}
+                          title="Edit Produk"
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            width: 34,
+                            height: 34,
+                            borderRadius: "50%",
+                            background: "rgba(184,134,11,0.10)",
+                            border: "1px solid rgba(184,134,11,0.25)",
+                            color: "#b8860b",
+                            cursor: "pointer",
+                            transition: "background 0.18s, transform 0.15s",
+                          }}
+                          onMouseEnter={e => { e.currentTarget.style.background = "rgba(184,134,11,0.22)"; e.currentTarget.style.transform = "scale(1.1)"; }}
+                          onMouseLeave={e => { e.currentTarget.style.background = "rgba(184,134,11,0.10)"; e.currentTarget.style.transform = "scale(1)"; }}
                         >
-                          ✏️ Edit
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                          </svg>
                         </button>
                         <button
                           onClick={() => handleDelete(p.id)}
-                          className="text-xs font-semibold hover:opacity-70 transition-opacity"
-                          style={{ color: "#dc2626" }}
+                          title="Hapus Produk"
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            width: 34,
+                            height: 34,
+                            borderRadius: "50%",
+                            background: "rgba(220,38,38,0.08)",
+                            border: "1px solid rgba(220,38,38,0.20)",
+                            color: "#dc2626",
+                            cursor: "pointer",
+                            transition: "background 0.18s, transform 0.15s",
+                          }}
+                          onMouseEnter={e => { e.currentTarget.style.background = "rgba(220,38,38,0.18)"; e.currentTarget.style.transform = "scale(1.1)"; }}
+                          onMouseLeave={e => { e.currentTarget.style.background = "rgba(220,38,38,0.08)"; e.currentTarget.style.transform = "scale(1)"; }}
                         >
-                          🗑 Hapus
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                            <path d="M10 11v6"/>
+                            <path d="M14 11v6"/>
+                            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                          </svg>
                         </button>
                       </div>
                     </td>
