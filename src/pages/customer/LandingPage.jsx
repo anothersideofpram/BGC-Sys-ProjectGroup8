@@ -122,7 +122,7 @@ export default function LandingPage() {
 
   const handleHubungiKami = () => {
     window.open(
-      "https://wa.me/6281234567890?text=Halo%20BlackGold%20Cherish,%20saya%20ingin%20berkonsultasi%20mengenai%20gaya%20personal%20saya.",
+      "https://wa.me/6285761004981?text=Halo%20BlackGold%20Cherish,%20saya%20ingin%20berkonsultasi%20mengenai%20gaya%20personal%20saya.",
       "_blank"
     );
   };
