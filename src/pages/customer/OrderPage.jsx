@@ -12,16 +12,20 @@ export default function OrderPage() {
   const location  = useLocation();
 
   const incomingProduct = location.state?.product || null;
+  const fromCart = !incomingProduct;
 
   const [cartItems, setCartItems]     = useState([]);
   const [userProfile, setUserProfile] = useState(null);
-  const [form, setForm]               = useState({ nama: "", email: "", telepon: "", alamat: "", payment: "bank", catatan: "" });
+  const [form, setForm]               = useState({ nama: "", email: "", telepon: "", alamat: "", payment: "bank", subPayment: "BCA", catatan: "" });
   const [submitted, setSubmitted]     = useState(false);
   const [orderId, setOrderId]         = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [buktiFile, setBuktiFile]     = useState(null);
+  const [previewUrl, setPreviewUrl]   = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadDone, setUploadDone]   = useState(false);
+  const [warningMessage, setWarningMessage] = useState(null);
+  const [copiedId, setCopiedId]       = useState(null);
 
   useEffect(() => {
     const init = async () => {
@@ -71,6 +75,16 @@ export default function OrderPage() {
     init();
   }, []);
 
+  useEffect(() => {
+    if (!buktiFile) {
+      setPreviewUrl(null);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(buktiFile);
+    setPreviewUrl(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [buktiFile]);
+
   const subtotal  = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
   const ppn       = subtotal * PPN_RATE;
   const total     = subtotal + ppn;
@@ -106,11 +120,11 @@ export default function OrderPage() {
   
   const handleSubmit = async () => {
     if (!form.nama || !form.email || !form.telepon || !form.alamat) {
-      alert("Mohon lengkapi semua data pemesanan.");
+      setWarningMessage("Mohon lengkapi semua data pemesanan Anda sebelum melanjutkan.");
       return;
     }
     if (cartItems.length === 0) {
-      alert("Keranjang kosong.");
+      setWarningMessage("Keranjang belanja Anda kosong. Silakan pilih produk terlebih dahulu.");
       return;
     }
 
@@ -130,7 +144,7 @@ export default function OrderPage() {
         email:             form.email,
         no_hp:             form.telepon,
         alamat_pengiriman: form.alamat,
-        metode_pembayaran: form.payment,
+        metode_pembayaran: form.payment === "cod" ? "cod" : `${form.payment} (${form.subPayment})`,
         subtotal:          subtotal,
         ppn:               ppn,
         total_harga:       total,
@@ -141,7 +155,7 @@ export default function OrderPage() {
       .single();
 
     if (orderErr || !orderData) {
-      alert("Gagal membuat pesanan: " + (orderErr?.message || "Unknown error"));
+      setWarningMessage("Gagal membuat pesanan: " + (orderErr?.message || "Kesalahan tidak dikenal"));
       setIsSubmitting(false);
       return;
     }
@@ -164,7 +178,7 @@ export default function OrderPage() {
     const { error: itemsErr } = await supabase.from("order_items").insert(itemsPayload);
 
     if (itemsErr) {
-      alert("Pesanan dibuat tapi gagal menyimpan item: " + itemsErr.message);
+      setWarningMessage("Pesanan dibuat tetapi gagal menyimpan produk pesanan: " + itemsErr.message);
     }
 
     setIsSubmitting(false);
@@ -175,29 +189,62 @@ export default function OrderPage() {
     setSubmitted(true);
   };
 
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
   const handleUploadBukti = async () => {
     if (!buktiFile || !orderId) return;
     setIsUploading(true);
-    const ext  = buktiFile.name.split(".").pop();
-    const path = `bukti/${orderId}.${ext}`;
-    const { error: upErr } = await supabase.storage
-      .from("payment-proofs")
-      .upload(path, buktiFile, { upsert: true });
-    if (upErr) {
-      alert("Gagal upload: " + upErr.message);
+    try {
+      const ext  = buktiFile.name.split(".").pop();
+      const path = `bukti/${orderId}.${ext}`;
+      let imageUrl = "";
+
+      const { data: upData, error: upErr } = await supabase.storage
+        .from("payment-proofs")
+        .upload(path, buktiFile, { upsert: true });
+
+      if (!upErr && upData) {
+        const { data: urlData } = supabase.storage.from("payment-proofs").getPublicUrl(path);
+        imageUrl = urlData.publicUrl;
+      } else {
+        console.warn("Storage upload failed, using base64 fallback:", upErr?.message);
+        imageUrl = await getBase64(buktiFile);
+      }
+
+      const { error: dbErr } = await supabase
+        .from("orders")
+        .update({ bukti_transfer: imageUrl })
+        .eq("id", orderId);
+
+      if (dbErr) {
+        setWarningMessage("Gagal menyimpan bukti transfer: " + dbErr.message);
+      } else {
+        setUploadDone(true);
+      }
+    } catch (err) {
+      setWarningMessage("Kesalahan saat unggah bukti: " + err.message);
+    } finally {
       setIsUploading(false);
-      return;
     }
-    const { data: urlData } = supabase.storage.from("payment-proofs").getPublicUrl(path);
-    await supabase.from("orders").update({ bukti_transfer: urlData.publicUrl }).eq("id", orderId);
-    setIsUploading(false);
-    setUploadDone(true);
   };
 
   const REKENING = [
-    { bank: "BCA",    no: "1234567890",  nama: "BlackGold Cherish" },
-    { bank: "Mandiri", no: "0987654321", nama: "BlackGold Cherish" },
-    { bank: "BNI",    no: "1122334455",  nama: "BlackGold Cherish" },
+    { bank: "BCA",    no: "1234567890",  nama: "BlackGold Cherish", logo: "🏦" },
+    { bank: "Mandiri", no: "0987654321", nama: "BlackGold Cherish", logo: "🏦" },
+    { bank: "BNI",    no: "1122334455",  nama: "BlackGold Cherish", logo: "🏦" },
+  ];
+
+  const EWALLET = [
+    { bank: "GoPay",  no: "08123456789", nama: "BlackGold Cherish", logo: "📱" },
+    { bank: "OVO",    no: "08123456789", nama: "BlackGold Cherish", logo: "📱" },
+    { bank: "Dana",   no: "08123456789", nama: "BlackGold Cherish", logo: "📱" },
   ];
 
   if (submitted) {
@@ -243,30 +290,61 @@ export default function OrderPage() {
           <div className="bg-pink-50 border border-pink-200 rounded-2xl px-6 py-4 text-center">
             <p className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: "#a07080" }}>Total Pembayaran</p>
             <p className="text-3xl font-extrabold kol-harga-gradient">{toRp(total)}</p>
-            <p className="text-xs mt-1" style={{ color: "#a07080" }}>Metode: {form.payment === "ewallet" ? "E-Wallet" : "Transfer Bank"}</p>
+            <p className="text-xs mt-1" style={{ color: "#a07080" }}>
+              Metode: {form.payment === "ewallet" ? `E-Wallet (${form.subPayment || "GoPay"})` : `Transfer Bank (${form.subPayment || "BCA"})`}
+            </p>
           </div>
 
           <div className="bg-white border border-pink-100 rounded-2xl p-6">
-            <p className="font-bold text-base mb-4" style={{ color: "#1a0a10" }}>🏦 Rekening Pembayaran</p>
-            <div className="space-y-3">
-              {(form.payment === "ewallet"
-                ? [{ bank: "GoPay / OVO / Dana", no: "08123456789", nama: "BlackGold Cherish" }]
-                : REKENING
-              ).map((r) => (
-                <div key={r.bank} className="flex justify-between items-center bg-pink-50 rounded-xl px-4 py-3">
-                  <div>
-                    <p className="font-bold text-sm" style={{ color: "#1a0a10" }}>{r.bank}</p>
-                    <p className="font-mono text-lg font-bold" style={{ color: "#b8860b" }}>{r.no}</p>
-                    <p className="text-xs" style={{ color: "#a07080" }}>a.n. {r.nama}</p>
-                  </div>
-                  <button
-                    onClick={() => { navigator.clipboard.writeText(r.no); }}
-                    className="text-xs px-3 py-1.5 rounded-lg border border-pink-200 text-pink-500 hover:bg-pink-100 transition-colors"
-                  >
-                    Salin
-                  </button>
-                </div>
+            <p className="font-bold text-base mb-4" style={{ color: "#1a0a10" }}>
+              {form.payment === "ewallet" ? "📱 Transfer E-Wallet" : "🏦 Transfer Bank"}
+            </p>
+
+            {/* Quick selector on payment page */}
+            <div className="flex gap-2 mb-4">
+              {(form.payment === "ewallet" ? ["GoPay", "OVO", "Dana"] : ["BCA", "Mandiri", "BNI"]).map(opt => (
+                <button
+                  key={opt}
+                  type="button"
+                  onClick={() => setForm(prev => ({ ...prev, subPayment: opt }))}
+                  className={`flex-1 py-2.5 rounded-xl text-xs font-bold border transition-all ${
+                    form.subPayment === opt 
+                      ? "bg-pink-500 text-white border-pink-500 shadow-md" 
+                      : "border-pink-100 bg-pink-50/50 text-gray-600 hover:bg-pink-50"
+                  }`}
+                >
+                  {opt}
+                </button>
               ))}
+            </div>
+
+            <div className="space-y-3">
+              {(form.payment === "ewallet" ? EWALLET : REKENING)
+                .filter(r => r.bank === (form.subPayment || (form.payment === "ewallet" ? "GoPay" : "BCA")))
+                .map((r) => (
+                  <div key={r.bank} className="flex justify-between items-center bg-pink-50 rounded-xl px-4 py-3 border border-pink-100/50">
+                    <div>
+                      <p className="font-bold text-sm" style={{ color: "#1a0a10" }}>{r.logo} {r.bank}</p>
+                      <p className="font-mono text-lg font-bold" style={{ color: "#b8860b" }}>{r.no}</p>
+                      <p className="text-xs" style={{ color: "#a07080" }}>a.n. {r.nama}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => { 
+                        navigator.clipboard.writeText(r.no); 
+                        setCopiedId(r.bank);
+                        setTimeout(() => setCopiedId(null), 2000);
+                      }}
+                      className={`text-xs px-3 py-1.5 rounded-lg border transition-colors font-semibold ${
+                        copiedId === r.bank
+                          ? "border-green-300 bg-green-50 text-green-600"
+                          : "border-pink-200 text-pink-500 hover:bg-pink-100"
+                      }`}
+                    >
+                      {copiedId === r.bank ? "Tersalin ✓" : "Salin"}
+                    </button>
+                  </div>
+                ))}
             </div>
             <p className="text-xs mt-4 text-amber-700 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
               ⚠️ Harap transfer tepat sesuai nominal. Sertakan ID pesanan sebagai keterangan transfer.
@@ -284,7 +362,12 @@ export default function OrderPage() {
                   {buktiFile ? (
                     <>
                       <div className="text-3xl mb-2">🖼️</div>
-                      <p className="text-sm font-semibold" style={{ color: "#b8860b" }}>{buktiFile.name}</p>
+                      <p className="text-sm font-semibold mb-2" style={{ color: "#b8860b" }}>{buktiFile.name}</p>
+                      {previewUrl && (
+                        <div className="max-w-xs mx-auto mb-3 border border-pink-100 rounded-lg overflow-hidden shadow-sm bg-white">
+                          <img src={previewUrl} alt="Preview Bukti" className="w-full h-auto max-h-48 object-contain mx-auto p-1" />
+                        </div>
+                      )}
                       <p className="text-xs mt-1" style={{ color: "#a07080" }}>Klik untuk ganti file</p>
                     </>
                   ) : (
@@ -303,9 +386,10 @@ export default function OrderPage() {
                 />
               </label>
               <button
+                type="button"
                 onClick={handleUploadBukti}
                 disabled={!buktiFile || isUploading}
-                className="mt-4 w-full py-3 rounded-full text-white text-sm font-bold disabled:opacity-50 transition-all"
+                className="mt-4 w-full py-3 rounded-full text-white text-sm font-bold disabled:opacity-50 transition-all cursor-pointer"
                 style={{ background: "linear-gradient(135deg, #e91e8c, #c9a227)" }}
               >
                 {isUploading ? "Mengunggah..." : "Kirim Bukti Transfer"}
@@ -484,21 +568,73 @@ export default function OrderPage() {
                   { id: "bank",    label: "Transfer Bank",         desc: "BCA · Mandiri · BNI" },
                   { id: "ewallet", label: "E-Wallet",              desc: "GoPay · OVO · Dana" },
                   { id: "cod",     label: "COD (Bayar di Tempat)", desc: "Bayar saat barang diterima" },
-                ].map((pay) => (
-                  <button key={pay.id} type="button" onClick={() => setForm({ ...form, payment: pay.id })}
-                    className={`w-full border rounded-2xl p-4 flex items-start gap-4 text-left transition-all ${
-                      form.payment === pay.id ? "border-pink-400 bg-pink-50" : "border-pink-100 hover:border-pink-200"
-                    }`}
-                  >
-                    <div className={`w-5 h-5 rounded-full border-2 mt-0.5 shrink-0 transition-colors ${
-                      form.payment === pay.id ? "bg-pink-500 border-pink-500" : "border-gray-300"
-                    }`} />
-                    <div>
-                      <p className="font-semibold text-sm" style={{ color: "#1a0a10" }}>{pay.label}</p>
-                      <p className="text-xs mt-0.5" style={{ color: "#a07080" }}>{pay.desc}</p>
+                ].map((pay) => {
+                  const isSelected = form.payment === pay.id;
+                  return (
+                    <div key={pay.id} className="space-y-2">
+                      <button key={pay.id} type="button" 
+                        onClick={() => {
+                          setForm({ 
+                            ...form, 
+                            payment: pay.id, 
+                            subPayment: pay.id === "bank" ? "BCA" : pay.id === "ewallet" ? "GoPay" : "" 
+                          });
+                        }}
+                        className={`w-full border rounded-2xl p-4 flex items-start gap-4 text-left transition-all cursor-pointer ${
+                          isSelected ? "border-pink-400 bg-pink-50" : "border-pink-100 hover:border-pink-200"
+                        }`}
+                      >
+                        <div className={`w-5 h-5 rounded-full border-2 mt-0.5 shrink-0 transition-colors ${
+                          isSelected ? "bg-pink-500 border-pink-500" : "border-gray-300"
+                        }`} />
+                        <div>
+                          <p className="font-semibold text-sm" style={{ color: "#1a0a10" }}>{pay.label}</p>
+                          <p className="text-xs mt-0.5" style={{ color: "#a07080" }}>{pay.desc}</p>
+                        </div>
+                      </button>
+
+                      {/* Sub options for bank */}
+                      {isSelected && pay.id === "bank" && (
+                        <div className="pl-9 grid grid-cols-3 gap-2 py-1">
+                          {["BCA", "Mandiri", "BNI"].map(b => (
+                            <button
+                              key={b}
+                              type="button"
+                              onClick={() => setForm({ ...form, subPayment: b })}
+                              className={`py-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+                                form.subPayment === b 
+                                  ? "bg-pink-100 border-pink-400 text-pink-700 shadow-sm" 
+                                  : "border-pink-100 bg-white text-gray-600 hover:border-pink-200"
+                              }`}
+                            >
+                              {b}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Sub options for ewallet */}
+                      {isSelected && pay.id === "ewallet" && (
+                        <div className="pl-9 grid grid-cols-3 gap-2 py-1">
+                          {["GoPay", "OVO", "Dana"].map(ew => (
+                            <button
+                              key={ew}
+                              type="button"
+                              onClick={() => setForm({ ...form, subPayment: ew })}
+                              className={`py-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+                                form.subPayment === ew 
+                                  ? "bg-pink-100 border-pink-400 text-pink-700 shadow-sm" 
+                                  : "border-pink-100 bg-white text-gray-600 hover:border-pink-200"
+                              }`}
+                            >
+                              {ew}
+                            </button>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                  </button>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
@@ -534,6 +670,40 @@ export default function OrderPage() {
           </div>
         </div>
       </div>
+      {warningMessage && (
+        <div 
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-alert-fade"
+          onClick={() => setWarningMessage(null)}
+        >
+          <style>{`
+            @keyframes alert-fadeIn { from { opacity: 0; } to { opacity: 1; } }
+            @keyframes alert-scaleUp { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+            .animate-alert-fade { animation: alert-fadeIn 0.2s ease-out forwards; }
+            .animate-alert-scale { animation: alert-scaleUp 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+          `}</style>
+          <div 
+            className="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl border border-pink-100 animate-alert-scale"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="w-16 h-16 bg-amber-50 border border-amber-200 text-amber-500 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 animate-bounce">
+              ⚠️
+            </div>
+            <h3 className="font-bold text-base mb-2" style={{ color: "#1a0a10", fontFamily: "var(--font-playfair,serif)" }}>
+              Informasi Pemesanan
+            </h3>
+            <p className="text-xs mb-6 leading-relaxed" style={{ color: "#6b4a58" }}>
+              {warningMessage}
+            </p>
+            <button
+              onClick={() => setWarningMessage(null)}
+              className="w-full py-3 rounded-full text-white text-xs font-bold transition-all hover:opacity-90 active:scale-95 cursor-pointer shadow-md"
+              style={{ background: "linear-gradient(135deg, #e91e8c, #c9a227)" }}
+            >
+              Mengerti
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -22,6 +22,10 @@ export default function RiwayatPesanan() {
   const [orders, setOrders]     = useState([]);
   const [loading, setLoading]   = useState(true);
   const [selected, setSelected] = useState(null);
+  
+  const [buktiFile, setBuktiFile]     = useState(null);
+  const [previewUrl, setPreviewUrl]   = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -48,6 +52,65 @@ export default function RiwayatPesanan() {
 
     fetchOrders();
   }, []);
+
+  useEffect(() => {
+    if (!buktiFile) {
+      setPreviewUrl(null);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(buktiFile);
+    setPreviewUrl(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [buktiFile]);
+
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  const handleUploadBukti = async (orderId) => {
+    if (!buktiFile || !orderId) return;
+    setIsUploading(true);
+    try {
+      const ext  = buktiFile.name.split(".").pop();
+      const path = `bukti/${orderId}.${ext}`;
+      let imageUrl = "";
+
+      const { data: upData, error: upErr } = await supabase.storage
+        .from("payment-proofs")
+        .upload(path, buktiFile, { upsert: true });
+
+      if (!upErr && upData) {
+        const { data: urlData } = supabase.storage.from("payment-proofs").getPublicUrl(path);
+        imageUrl = urlData.publicUrl;
+      } else {
+        console.warn("Storage upload failed, using base64 fallback:", upErr?.message);
+        imageUrl = await getBase64(buktiFile);
+      }
+
+      const { error: dbErr } = await supabase
+        .from("orders")
+        .update({ bukti_transfer: imageUrl })
+        .eq("id", orderId);
+
+      if (dbErr) {
+        alert("Gagal menyimpan bukti transfer: " + dbErr.message);
+      } else {
+        alert("Bukti transfer berhasil dikirim!");
+        setOrders(prev => prev.map(o => o.id === orderId ? { ...o, bukti_transfer: imageUrl } : o));
+        setSelected(prev => ({ ...prev, bukti_transfer: imageUrl }));
+        setBuktiFile(null);
+      }
+    } catch (err) {
+      alert("Kesalahan saat unggah bukti: " + err.message);
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const statKeys = ["menunggu_konfirmasi", "produksi", "dikirim", "selesai"];
   const statLabels = {
@@ -163,50 +226,163 @@ export default function RiwayatPesanan() {
       </div>
 
       
-      {selected && (
-        <div className="kol-modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setSelected(null)}>
-          <div className="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl" onClick={e => e.stopPropagation()}>
-            <div className="flex justify-between items-start mb-6">
-              <div>
-                <p className="font-mono font-bold text-lg" style={{ color: "#b8860b" }}>
-                  #{String(selected.id).slice(0, 8).toUpperCase()}
-                </p>
-                <p className="text-sm" style={{ color: "#a07080" }}>
-                  {selected.created_at ? new Date(selected.created_at).toLocaleDateString("id-ID", { day: "2-digit", month: "long", year: "numeric" }) : "—"}
-                </p>
-              </div>
-              <button onClick={() => setSelected(null)} className="text-gray-300 hover:text-gray-500 text-2xl">×</button>
-            </div>
-            {[
-              ["Produk",       selected.order_items?.[0]?.nama_produk || "—"],
-              ["Ukuran",       selected.order_items?.[0]?.ukuran || "—"],
-              ["Metode Bayar", selected.metode_pembayaran || "—"],
-              ["Total",        toRp(selected.total_harga)],
-              ["Status",       statusConfig[selected.status_pesanan]?.label || selected.status_pesanan],
-            ].map(([k, v]) => (
-              <div key={k} className="flex justify-between py-3 border-b border-pink-50 text-sm">
-                <span style={{ color: "#a07080" }}>{k}</span>
-                <span className="font-semibold" style={{ color: selected.status_pesanan === "dibatalkan" && k === "Status" ? "#dc2626" : "#1a0a10" }}>{v}</span>
-              </div>
-            ))}
-            
-            {selected.status_pesanan === "dibatalkan" && selected.catatan_umum && (
-              <div className="mt-4 p-4 rounded-2xl text-xs border" style={{ background: "rgba(220,38,38,0.05)", borderColor: "rgba(220,38,38,0.15)", color: "#dc2626" }}>
-                <p className="font-bold mb-1" style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.05em" }}>Alasan Pembatalan</p>
-                <p style={{ margin: 0, color: "#7f1d1d", lineHeight: 1.5 }}>
-                  {selected.catatan_umum.replace("[DIBATALKAN ADMIN]", "").trim() || "Tidak ada alasan spesifik yang diberikan."}
-                </p>
-              </div>
-            )}
+      {selected && (() => {
+        const isBank = selected.metode_pembayaran?.toLowerCase().includes("bank");
+        const isEwallet = selected.metode_pembayaran?.toLowerCase().includes("ewallet");
+        const isCod = selected.metode_pembayaran?.toLowerCase() === "cod";
+        
+        let sub = "BCA";
+        if (selected.metode_pembayaran?.includes("BCA")) sub = "BCA";
+        else if (selected.metode_pembayaran?.includes("Mandiri")) sub = "Mandiri";
+        else if (selected.metode_pembayaran?.includes("BNI")) sub = "BNI";
+        else if (selected.metode_pembayaran?.includes("GoPay")) sub = "GoPay";
+        else if (selected.metode_pembayaran?.includes("OVO")) sub = "OVO";
+        else if (selected.metode_pembayaran?.includes("Dana")) sub = "Dana";
 
-            {selected.status_pesanan !== "dibatalkan" && (
-              <button onClick={() => navigate("/status-produksi")} className="kol-btn-pesan w-full mt-6 py-3 rounded-full text-white text-sm font-semibold">
-                Lihat Status Produksi
-              </button>
-            )}
+        return (
+          <div className="kol-modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => { setSelected(null); setBuktiFile(null); }}>
+            <div className="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl overflow-y-auto max-h-[90vh]" onClick={e => e.stopPropagation()}>
+              <div className="flex justify-between items-start mb-6">
+                <div>
+                  <p className="font-mono font-bold text-lg" style={{ color: "#b8860b" }}>
+                    #{String(selected.id).slice(0, 8).toUpperCase()}
+                  </p>
+                  <p className="text-sm" style={{ color: "#a07080" }}>
+                    {selected.created_at ? new Date(selected.created_at).toLocaleDateString("id-ID", { day: "2-digit", month: "long", year: "numeric" }) : "—"}
+                  </p>
+                </div>
+                <button onClick={() => { setSelected(null); setBuktiFile(null); }} className="text-gray-300 hover:text-gray-500 text-2xl">×</button>
+              </div>
+              {[
+                ["Produk",       selected.order_items?.[0]?.nama_produk || "—"],
+                ["Ukuran",       selected.order_items?.[0]?.ukuran || "—"],
+                ["Metode Bayar", selected.metode_pembayaran || "—"],
+                ["Total",        toRp(selected.total_harga)],
+                ["Status",       statusConfig[selected.status_pesanan]?.label || selected.status_pesanan],
+              ].map(([k, v]) => (
+                <div key={k} className="flex justify-between py-3 border-b border-pink-50 text-sm">
+                  <span style={{ color: "#a07080" }}>{k}</span>
+                  <span className="font-semibold" style={{ color: selected.status_pesanan === "dibatalkan" && k === "Status" ? "#dc2626" : "#1a0a10" }}>{v}</span>
+                </div>
+              ))}
+              
+              {/* Payment Details and Proof Upload (Only for waiting confirmation and non-COD) */}
+              {selected.status_pesanan === "menunggu_konfirmasi" && !isCod && (
+                <>
+                  <div className="mt-4 p-4 bg-pink-50/50 border border-pink-100/70 rounded-2xl text-xs space-y-2">
+                    <p className="font-bold text-slate-800" style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                      {isEwallet ? "📱 Transfer E-Wallet" : "🏦 Transfer Pembayaran"}
+                    </p>
+                    <div className="flex justify-between items-center bg-white rounded-lg p-2.5 border border-pink-100">
+                      <div>
+                        <p className="font-semibold text-slate-700">{isEwallet ? "📱" : "🏦"} {sub}</p>
+                        <p className="font-mono text-sm font-bold text-amber-600">
+                          {sub === "BCA" && "1234567890"}
+                          {sub === "Mandiri" && "0987654321"}
+                          {sub === "BNI" && "1122334455"}
+                          {["GoPay", "OVO", "Dana"].includes(sub) && "08123456789"}
+                        </p>
+                        <p className="text-[10px] text-gray-400">a.n. BlackGold Cherish</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const no = sub === "BCA" ? "1234567890" : sub === "Mandiri" ? "0987654321" : sub === "BNI" ? "1122334455" : "08123456789";
+                          navigator.clipboard.writeText(no);
+                          alert(`Nomor ${sub} berhasil disalin!`);
+                        }}
+                        className="text-[10px] px-2.5 py-1.5 rounded border border-pink-200 text-pink-500 hover:bg-pink-100 transition-colors font-semibold"
+                      >
+                        Salin
+                      </button>
+                    </div>
+                  </div>
+
+                  {!selected.bukti_transfer ? (
+                    <div className="mt-4 p-4 border border-pink-100 rounded-2xl bg-white space-y-3">
+                      <p className="font-bold text-slate-800 text-xs">📎 Upload Bukti Transfer</p>
+                      <label className="block cursor-pointer">
+                        <div className={`border border-dashed rounded-xl p-3 text-center transition-colors ${
+                          buktiFile ? "border-pink-400 bg-pink-50/50" : "border-pink-200 hover:border-pink-300"
+                        }`}>
+                          {buktiFile ? (
+                            <div>
+                              <p className="text-[11px] font-semibold text-amber-600 truncate">{buktiFile.name}</p>
+                              {previewUrl && (
+                                <div className="max-w-[120px] mx-auto my-1.5 border border-pink-50 rounded overflow-hidden bg-white shadow-sm">
+                                  <img src={previewUrl} alt="Preview" className="w-full h-auto max-h-24 object-contain mx-auto" />
+                                </div>
+                              )}
+                              <p className="text-[9px] text-gray-400">Klik untuk ganti file</p>
+                            </div>
+                          ) : (
+                            <div>
+                              <p className="text-[11px] text-gray-500">Pilih foto/screenshot bukti transfer</p>
+                              <p className="text-[9px] text-gray-400 mt-0.5">JPG, PNG · Maks 5MB</p>
+                            </div>
+                          )}
+                        </div>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => setBuktiFile(e.target.files?.[0] || null)}
+                        />
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => handleUploadBukti(selected.id)}
+                        disabled={!buktiFile || isUploading}
+                        className="w-full py-2 rounded-xl text-white text-xs font-bold disabled:opacity-50 transition-all cursor-pointer"
+                        style={{ background: "linear-gradient(135deg, #e91e8c, #c9a227)" }}
+                      >
+                        {isUploading ? "Mengunggah..." : "Kirim Bukti Transfer"}
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-2xl text-center">
+                      <p className="text-xs font-bold text-green-700">✓ Bukti Pembayaran Sudah Diunggah</p>
+                      <p className="text-[10px] text-gray-500 mt-0.5">Menunggu verifikasi admin</p>
+                      <div className="max-w-[120px] mx-auto mt-2 border border-green-100 rounded overflow-hidden bg-white shadow-sm">
+                        <a href={selected.bukti_transfer} target="_blank" rel="noreferrer">
+                          <img src={selected.bukti_transfer} alt="Bukti Transfer" className="w-full h-auto max-h-24 object-contain mx-auto cursor-pointer hover:opacity-90 transition-opacity" />
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* Show proof for other statuses if it exists */}
+              {selected.status_pesanan !== "menunggu_konfirmasi" && selected.bukti_transfer && (
+                <div className="mt-4 p-3 bg-slate-50 border border-slate-200 rounded-2xl text-center">
+                  <p className="text-xs font-bold text-slate-600">Bukti Pembayaran Terverifikasi</p>
+                  <div className="max-w-[120px] mx-auto mt-2 border border-slate-200 rounded overflow-hidden bg-white shadow-sm">
+                    <a href={selected.bukti_transfer} target="_blank" rel="noreferrer">
+                      <img src={selected.bukti_transfer} alt="Bukti Transfer" className="w-full h-auto max-h-24 object-contain mx-auto cursor-pointer hover:opacity-90 transition-opacity" />
+                    </a>
+                  </div>
+                </div>
+              )}
+              
+              {selected.status_pesanan === "dibatalkan" && selected.catatan_umum && (
+                <div className="mt-4 p-4 rounded-2xl text-xs border" style={{ background: "rgba(220,38,38,0.05)", borderColor: "rgba(220,38,38,0.15)", color: "#dc2626" }}>
+                  <p className="font-bold mb-1" style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.05em" }}>Alasan Pembatalan</p>
+                  <p style={{ margin: 0, color: "#7f1d1d", lineHeight: 1.5 }}>
+                    {selected.catatan_umum.replace("[DIBATALKAN ADMIN]", "").trim() || "Tidak ada alasan spesifik yang diberikan."}
+                  </p>
+                </div>
+              )}
+
+              {selected.status_pesanan !== "dibatalkan" && (
+                <button onClick={() => navigate("/status-produksi")} className="kol-btn-pesan w-full mt-6 py-3 rounded-full text-white text-sm font-semibold">
+                  Lihat Status Produksi
+                </button>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </div>
   );
 }
