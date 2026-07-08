@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CornerOrn, FloralOrn, GoldDivider, BrandStamp, DiamondPattern } from "../../component/Decorations";
 import { supabase } from "../../lib/supabase";
+import { getRole } from "../../utils/auth";
 
 const STEPS = [
   "Pesanan Diterima",
@@ -36,7 +37,7 @@ export default function StatusProduksi() {
         || localStorage.getItem("userToken")
         || sessionStorage.getItem("userToken");
 
-      if (!userId || userId === "admin-token" || userId === "owner-token") {
+      if (!userId || getRole() === "admin" || getRole() === "owner") {
         setLoading(false);
         return;
       }

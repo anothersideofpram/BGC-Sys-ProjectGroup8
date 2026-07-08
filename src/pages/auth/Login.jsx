@@ -7,8 +7,7 @@ import { setAuth, getRole, getToken } from "../../utils/auth";
 import PanelSelector from "../../component/PanelSelector";
 import { supabase } from "../../lib/supabase";
 
-const HARDCODED_ADMIN = { email: "admin@blackgoldcherish.com", password: "admin123", role: "admin", token: "admin-token" };
-const HARDCODED_OWNER = { email: "owner@blackgoldcherish.com", password: "owner123", role: "owner", token: "owner-token" };
+
 
 export default function Login() {
   const navigate = useNavigate();
@@ -38,20 +37,6 @@ export default function Login() {
     setLoading(true);
     setError("");
 
-    if (dataForm.email === HARDCODED_ADMIN.email && dataForm.password === HARDCODED_ADMIN.password) {
-      setAuth({ token: HARDCODED_ADMIN.token, role: HARDCODED_ADMIN.role }, rememberMe);
-      sessionStorage.setItem("welcomeToast", JSON.stringify({ role: "admin" }));
-      setLoading(false);
-      navigate("/dashboard");
-      return;
-    }
-    if (dataForm.email === HARDCODED_OWNER.email && dataForm.password === HARDCODED_OWNER.password) {
-      setAuth({ token: HARDCODED_OWNER.token, role: HARDCODED_OWNER.role }, rememberMe);
-      sessionStorage.setItem("welcomeToast", JSON.stringify({ role: "owner" }));
-      setLoading(false);
-      setShowSelector(true);
-      return;
-    }
 
     const { data, error: authError } = await supabase.auth.signInWithPassword({
       email: dataForm.email,

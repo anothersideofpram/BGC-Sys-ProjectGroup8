@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CornerOrn, FloralOrn, Sparkles, GoldDivider, BrandStamp, BotanicalLine } from "../../component/Decorations";
 import { supabase } from "../../lib/supabase";
+import { getRole } from "../../utils/auth";
 
 const statusConfig = {
   menunggu_konfirmasi: { label: "Menunggu Konfirmasi",  color: "#e91e8c", bg: "rgba(233,30,140,0.10)"  },
@@ -30,7 +31,7 @@ export default function RiwayatPesanan() {
         || localStorage.getItem("userToken")
         || sessionStorage.getItem("userToken");
 
-      if (!userId || userId === "admin-token" || userId === "owner-token") {
+      if (!userId || getRole() === "admin" || getRole() === "owner") {
         setLoading(false);
         return;
       }
@@ -185,12 +186,24 @@ export default function RiwayatPesanan() {
             ].map(([k, v]) => (
               <div key={k} className="flex justify-between py-3 border-b border-pink-50 text-sm">
                 <span style={{ color: "#a07080" }}>{k}</span>
-                <span className="font-semibold" style={{ color: "#1a0a10" }}>{v}</span>
+                <span className="font-semibold" style={{ color: selected.status_pesanan === "dibatalkan" && k === "Status" ? "#dc2626" : "#1a0a10" }}>{v}</span>
               </div>
             ))}
-            <button onClick={() => navigate("/status-produksi")} className="kol-btn-pesan w-full mt-6 py-3 rounded-full text-white text-sm font-semibold">
-              Lihat Status Produksi
-            </button>
+            
+            {selected.status_pesanan === "dibatalkan" && selected.catatan_umum && (
+              <div className="mt-4 p-4 rounded-2xl text-xs border" style={{ background: "rgba(220,38,38,0.05)", borderColor: "rgba(220,38,38,0.15)", color: "#dc2626" }}>
+                <p className="font-bold mb-1" style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.05em" }}>Alasan Pembatalan</p>
+                <p style={{ margin: 0, color: "#7f1d1d", lineHeight: 1.5 }}>
+                  {selected.catatan_umum.replace("[DIBATALKAN ADMIN]", "").trim() || "Tidak ada alasan spesifik yang diberikan."}
+                </p>
+              </div>
+            )}
+
+            {selected.status_pesanan !== "dibatalkan" && (
+              <button onClick={() => navigate("/status-produksi")} className="kol-btn-pesan w-full mt-6 py-3 rounded-full text-white text-sm font-semibold">
+                Lihat Status Produksi
+              </button>
+            )}
           </div>
         </div>
       )}

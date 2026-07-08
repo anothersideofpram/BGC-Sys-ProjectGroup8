@@ -24,11 +24,98 @@ const STATUS_FLOW = [
   "selesai",
 ];
 
+const CANCEL_ANIM = `
+  @keyframes co-fadeIn  { from { opacity:0 } to { opacity:1 } }
+  @keyframes co-slideUp { from { opacity:0; transform:translateY(20px) scale(0.97) } to { opacity:1; transform:translateY(0) scale(1) } }
+`;
+
+function CancelModal({ order, onConfirm, onClose, loading }) {
+  const [alasan, setAlasan] = useState("");
+
+  const handleKey = (e) => { if (e.key === "Escape") onClose(); };
+  useState(() => {
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  });
+
+  return (
+    <div
+      style={{
+        position: "fixed", inset: 0, zIndex: 9999,
+        background: "rgba(10,4,8,0.65)", backdropFilter: "blur(4px)",
+        display: "flex", alignItems: "center", justifyContent: "center", padding: 16,
+        animation: "co-fadeIn 0.2s ease",
+      }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <style>{CANCEL_ANIM}</style>
+      <div
+        style={{
+          background: "#fff", borderRadius: 20, width: "100%", maxWidth: 440,
+          boxShadow: "0 24px 64px rgba(0,0,0,0.18)",
+          animation: "co-slideUp 0.25s cubic-bezier(0.34,1.3,0.64,1)",
+          overflow: "hidden",
+        }}
+      >
+        <div style={{ background: "linear-gradient(135deg,#dc2626,#ef4444)", padding: "20px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>🗑</div>
+            <div>
+              <p style={{ color: "#fff", fontWeight: 700, fontSize: 15, margin: 0 }}>Batalkan Pesanan</p>
+              <p style={{ color: "rgba(255,255,255,0.75)", fontSize: 11, margin: 0 }}>Tindakan ini tidak dapat dibatalkan</p>
+            </div>
+          </div>
+          <button onClick={onClose} style={{ background: "rgba(255,255,255,0.15)", border: "none", borderRadius: 8, width: 30, height: 30, color: "#fff", fontSize: 16, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
+        </div>
+
+        <div style={{ padding: "20px 24px" }}>
+          <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 12, padding: "12px 14px", marginBottom: 16 }}>
+            <p style={{ fontSize: 11, color: "#dc2626", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 4 }}>Pesanan yang Dibatalkan</p>
+            <p style={{ fontSize: 13, fontWeight: 700, color: "#1a0a10", margin: 0 }}>#{String(order.id).slice(0,8).toUpperCase()} — {order.nama_pemesan}</p>
+            <p style={{ fontSize: 11, color: "#6b4a58", margin: "2px 0 0" }}>Total: Rp {Number(order.total_harga||0).toLocaleString("id-ID")}</p>
+          </div>
+
+          <div style={{ marginBottom: 16 }}>
+            <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "#374151", marginBottom: 6 }}>Alasan Pembatalan <span style={{ color: "#9ca3af", fontWeight: 400 }}>(opsional)</span></label>
+            <textarea
+              value={alasan}
+              onChange={(e) => setAlasan(e.target.value)}
+              rows={3}
+              placeholder="Contoh: Stok habis, customer meminta batal, dll."
+              style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 10, padding: "10px 12px", fontSize: 13, outline: "none", resize: "none", boxSizing: "border-box", fontFamily: "inherit", color: "#1a0a10" }}
+              onFocus={(e) => e.target.style.borderColor = "#dc2626"}
+              onBlur={(e) => e.target.style.borderColor = "#e5e7eb"}
+            />
+          </div>
+
+          <div style={{ display: "flex", gap: 10 }}>
+            <button
+              onClick={onClose}
+              disabled={loading}
+              style={{ flex: 1, padding: "11px", border: "1px solid #e5e7eb", borderRadius: 10, background: "#f9fafb", color: "#374151", fontWeight: 600, fontSize: 13, cursor: "pointer" }}
+            >
+              Batal
+            </button>
+            <button
+              onClick={() => onConfirm(alasan)}
+              disabled={loading}
+              style={{ flex: 1, padding: "11px", border: "none", borderRadius: 10, background: loading ? "#fca5a5" : "linear-gradient(135deg,#dc2626,#ef4444)", color: "#fff", fontWeight: 700, fontSize: 13, cursor: loading ? "not-allowed" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}
+            >
+              {loading ? <><span style={{ width: 14, height: 14, border: "2px solid rgba(255,255,255,0.4)", borderTop: "2px solid #fff", borderRadius: "50%", display: "inline-block", animation: "co-fadeIn 0.6s linear infinite" }} />Membatalkan...</> : "Ya, Batalkan Pesanan"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function OrdersDetail() {
   const [orders, setOrders]         = useState([]);
   const [loading, setLoading]       = useState(true);
-  const [selected, setSelected]     = useState(null);  
+  const [selected, setSelected]     = useState(null);
   const [updating, setUpdating]     = useState(false);
+  const [cancelModal, setCancelModal] = useState(null);
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -67,14 +154,26 @@ export default function OrdersDetail() {
     await updateStatus(orderId, "dikonfirmasi");
   };
 
-  const tolakPembayaran = async (orderId) => {
-    if (!confirm("Tolak pembayaran ini? Pesanan akan dibatalkan.")) return;
-    await updateStatus(orderId, "dibatalkan");
+  const tolakPembayaran = (order) => {
+    setCancelModal(order);
   };
 
-  const batalkanPesanan = async (orderId) => {
-    if (!confirm("Batalkan pesanan ini?")) return;
-    await updateStatus(orderId, "dibatalkan");
+  const batalkanPesanan = (order) => {
+    setCancelModal(order);
+  };
+
+  const handleConfirmCancel = async (alasan) => {
+    if (!cancelModal) return;
+    setUpdating(true);
+    const updateData = { status_pesanan: "dibatalkan", updated_at: new Date().toISOString() };
+    if (alasan?.trim()) updateData.catatan_umum = `[DIBATALKAN ADMIN] ${alasan.trim()}`;
+    const { error } = await supabase.from("orders").update(updateData).eq("id", cancelModal.id);
+    if (!error) {
+      setOrders(prev => prev.map(o => o.id === cancelModal.id ? { ...o, ...updateData } : o));
+      setSelected(prev => prev?.id === cancelModal.id ? { ...prev, ...updateData } : prev);
+    }
+    setUpdating(false);
+    setCancelModal(null);
   };
 
   const selesaikanPesanan = async (orderId) => {
@@ -97,6 +196,14 @@ export default function OrdersDetail() {
 
   return (
     <div id="orders-detail-container" className="p-6">
+      {cancelModal && (
+        <CancelModal
+          order={cancelModal}
+          onConfirm={handleConfirmCancel}
+          onClose={() => setCancelModal(null)}
+          loading={updating}
+        />
+      )}
       
       <div className="flex items-start justify-between mb-6 flex-wrap gap-3">
         <div>
@@ -247,7 +354,7 @@ export default function OrdersDetail() {
                       </button>
                       <button
                         disabled={updating}
-                        onClick={() => tolakPembayaran(selected.id)}
+                        onClick={() => tolakPembayaran(selected)}
                         className="flex-1 py-2.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-sm disabled:opacity-60"
                       >
                         ✗ Tolak
@@ -400,7 +507,7 @@ export default function OrdersDetail() {
               {selected.status_pesanan !== "selesai" && selected.status_pesanan !== "dibatalkan" && (
                 <button
                   disabled={updating}
-                  onClick={() => batalkanPesanan(selected.id)}
+                  onClick={() => batalkanPesanan(selected)}
                   className="w-full py-2.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-sm disabled:opacity-60"
                 >
                   🗑 Batalkan Pesanan
