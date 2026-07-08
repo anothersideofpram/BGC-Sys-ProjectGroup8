@@ -266,7 +266,7 @@ function Footer() {
         }}
       >
         <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.2)", margin: 0 }}>
-          © 2025 BlackGold Cherish. All rights reserved.
+          © 2023 BlackGold Cherish. All rights reserved.
         </p>
       </div>
     </footer>
