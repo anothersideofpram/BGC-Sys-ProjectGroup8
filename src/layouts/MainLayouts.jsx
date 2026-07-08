@@ -100,7 +100,6 @@ function SocialIcon({ id, icon: Icon, label, href, hoverColor, glowColor, bg, ho
   );
 }
 
-// ── Footer column helper ──────────────────────────────────────────
 const COL_HEADING = {
   fontSize: "11px",
   fontWeight: 800,
@@ -377,7 +376,6 @@ export default function MainLayout() {
             </div>
           </nav>
 
-          {/* Bar Mobile*/}
           <div
             className="sm:hidden sticky top-0 z-40 bg-white flex items-center justify-center px-4 py-3"
             style={{ borderBottom: "1px solid rgba(184,134,11,0.15)" }}
@@ -394,19 +392,16 @@ export default function MainLayout() {
         </>
       )}
 
-      {/* Bagian Halaman */}
       <div className={`flex-1 ${!isLanding ? "pb-20 sm:pb-0" : ""}`}>
         <Outlet />
       </div>
 
-      {/* Footer Desktop */}
       {!isLanding && (
         <div className="hidden sm:block">
           <Footer />
         </div>
       )}
 
-      {/* Mobile Bottom Nav*/}
       {!isLanding && (
         <nav
           className="sm:hidden fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around px-2 py-2"

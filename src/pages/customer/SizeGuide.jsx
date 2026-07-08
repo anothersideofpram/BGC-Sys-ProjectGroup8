@@ -13,7 +13,6 @@ const titleStyle = {
 };
 const bodyStyle = { fontSize: "14px", lineHeight: "1.75", color: "#4a3728" };
 
-// ✏️ Sesuaikan kategori & ukuran dengan produk butik kamu
 const SIZE_CATEGORIES = [
   {
     kategori: "Atasan / Blouse / Dress",

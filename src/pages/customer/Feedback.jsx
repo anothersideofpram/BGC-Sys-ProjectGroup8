@@ -29,12 +29,10 @@ export default function Feedback() {
   const [submitting, setSubmitting] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
 
-  // Fetch feedbacks and products
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        // Fetch approved feedbacks
         const { data: fbData, error: fbError } = await supabase
           .from("feedbacks")
           .select("*")
@@ -45,7 +43,6 @@ export default function Feedback() {
           setFeedbacks(fbData);
         }
 
-        // Fetch active products
         const { data: prodData } = await supabase
           .from("products")
           .select("id, nama_produk")
@@ -56,7 +53,6 @@ export default function Feedback() {
           setProducts(prodData);
         }
 
-        // Fetch authenticated user profile
         const { data: authData } = await supabase.auth.getUser();
         const userId = authData?.user?.id
           || localStorage.getItem("userToken")
@@ -120,7 +116,7 @@ export default function Feedback() {
           nama_produk: selectedProduct,
           rating: rating,
           komentar: komentar,
-          status_feedback: "pending", // require admin approval
+          status_feedback: "pending",
           perlu_perhatian: false
         });
 

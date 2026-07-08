@@ -13,7 +13,6 @@ const titleStyle = {
 };
 const bodyStyle = { fontSize: "14px", lineHeight: "1.75", color: "#4a3728" };
 
-// ✏️ Ganti dengan ekspedisi yang digunakan butik
 const EKSPEDISI = [
   { nama: "JNE", estimasi: "1–3 hari kerja", keterangan: "Tersedia untuk seluruh Indonesia" },
   { nama: "J&T Express", estimasi: "1–3 hari kerja", keterangan: "Tersedia untuk seluruh Indonesia" },

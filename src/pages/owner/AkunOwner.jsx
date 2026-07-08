@@ -15,7 +15,6 @@ export default function AkunOwner() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { setLoading(false); return; }
 
-      // Fetch dari tabel 'users'
       const { data: dbUser } = await supabase
         .from("users")
         .select("nama, no_hp, role, created_at")
@@ -41,7 +40,6 @@ export default function AkunOwner() {
   const handleSave = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
-      // Simpan perubahan ke tabel 'users'
       await supabase.from("users").upsert({
         id:    user.id,
         nama:  form.nama,
