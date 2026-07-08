@@ -248,7 +248,6 @@ function Footer() {
         <div>
           <span style={COL_HEADING}>Bantuan</span>
           <div style={COL_DIVIDER} />
-          <FooterLink to="/terms">Syarat &amp; Ketentuan</FooterLink>
           <FooterLink to="/faq">FAQ</FooterLink>
           <FooterLink to="/panduan-pembayaran">Panduan Pembayaran</FooterLink>
           <FooterLink to="/panduan-pengiriman">Info Pengiriman</FooterLink>

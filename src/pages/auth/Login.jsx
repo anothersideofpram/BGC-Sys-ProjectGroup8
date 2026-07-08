@@ -38,7 +38,6 @@ export default function Login() {
     setLoading(true);
     setError("");
 
-    
     if (dataForm.email === HARDCODED_ADMIN.email && dataForm.password === HARDCODED_ADMIN.password) {
       setAuth({ token: HARDCODED_ADMIN.token, role: HARDCODED_ADMIN.role }, rememberMe);
       sessionStorage.setItem("welcomeToast", JSON.stringify({ role: "admin" }));
@@ -54,7 +53,6 @@ export default function Login() {
       return;
     }
 
-    
     const { data, error: authError } = await supabase.auth.signInWithPassword({
       email: dataForm.email,
       password: dataForm.password,
@@ -76,8 +74,6 @@ export default function Login() {
     }
 
     const user = data.user;
-    
-    // Fetch role from the users table in database
     const { data: dbUser } = await supabase
       .from("users")
       .select("role")

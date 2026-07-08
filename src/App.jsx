@@ -21,7 +21,6 @@ const StatusProduksi = lazy(() => import("./pages/customer/StatusProduksi"));
 const Feedback = lazy(() => import("./pages/customer/Feedback"));
 const Akun = lazy(() => import("./pages/customer/Akun"));
 const Wishlist = lazy(() => import("./pages/customer/Wishlist"));
-const TermsOfService = lazy(() => import("./pages/customer/TermsOfService"));
 const FAQ = lazy(() => import("./pages/customer/FAQ"));
 const PanduanPembayaran = lazy(() => import("./pages/customer/PanduanPembayaran"));
 const InfoPengiriman = lazy(() => import("./pages/customer/InfoPengiriman"));
@@ -60,7 +59,6 @@ export default function App() {
           <Route path="/status-produksi" element={<StatusProduksi />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/akun" element={<Akun />} />
-          <Route path="/terms" element={<TermsOfService />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/panduan-pembayaran" element={<PanduanPembayaran />} />
           <Route path="/panduan-pengiriman" element={<InfoPengiriman />} />
