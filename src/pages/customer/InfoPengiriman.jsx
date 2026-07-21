@@ -17,7 +17,7 @@ const EKSPEDISI = [
   { nama: "JNE", estimasi: "1–3 hari kerja", keterangan: "Tersedia untuk seluruh Indonesia" },
   { nama: "J&T Express", estimasi: "1–3 hari kerja", keterangan: "Tersedia untuk seluruh Indonesia" },
   { nama: "SiCepat", estimasi: "1–2 hari kerja", keterangan: "Tersedia untuk kota-kota besar" },
-  { nama: "Gosend / Grab", estimasi: "Hari yang sama", keterangan: "Khusus area Jabodetabek (same-day)" },
+  { nama: "Gosend / Grab", estimasi: "Hari yang sama", keterangan: "Khusus area Pekanbaru (same-day)" },
 ];
 
 export default function InfoPengiriman() {
