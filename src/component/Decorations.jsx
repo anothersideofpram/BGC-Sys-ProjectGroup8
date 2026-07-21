@@ -1,6 +1,3 @@
-
-
-
 export function DiamondPattern({ className = "", opacity = 0.18, color = "#b8860b" }) {
   return (
     <svg

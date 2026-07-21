@@ -229,7 +229,6 @@ export default function RiwayatPesanan() {
       {selected && (() => {
         const isBank = selected.metode_pembayaran?.toLowerCase().includes("bank");
         const isEwallet = selected.metode_pembayaran?.toLowerCase().includes("ewallet");
-        const isCod = selected.metode_pembayaran?.toLowerCase() === "cod";
         
         let sub = "BCA";
         if (selected.metode_pembayaran?.includes("BCA")) sub = "BCA";
@@ -266,8 +265,8 @@ export default function RiwayatPesanan() {
                 </div>
               ))}
               
-              {/* Payment Details and Proof Upload (Only for waiting confirmation and non-COD) */}
-              {selected.status_pesanan === "menunggu_konfirmasi" && !isCod && (
+              {/* Payment Details and Proof Upload (Only for waiting confirmation) */}
+              {selected.status_pesanan === "menunggu_konfirmasi" && (
                 <>
                   <div className="mt-4 p-4 bg-pink-50/50 border border-pink-100/70 rounded-2xl text-xs space-y-2">
                     <p className="font-bold text-slate-800" style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.05em" }}>

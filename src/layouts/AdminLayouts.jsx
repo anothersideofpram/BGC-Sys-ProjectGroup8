@@ -2,8 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../component/Sidebar";
 import { Outlet } from "react-router-dom";
-import { FiLogOut } from "react-icons/fi";
-import { getRole, getToken, clearAuth } from "../utils/auth";
+import { getRole, getToken } from "../utils/auth";
 import MobileNav from "../component/MobileNav";
 
 export default function AdminLayouts() {

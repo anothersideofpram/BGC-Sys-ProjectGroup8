@@ -144,7 +144,7 @@ export default function OrderPage() {
         email:             form.email,
         no_hp:             form.telepon,
         alamat_pengiriman: form.alamat,
-        metode_pembayaran: form.payment === "cod" ? "cod" : `${form.payment} (${form.subPayment})`,
+        metode_pembayaran: `${form.payment} (${form.subPayment})`,
         subtotal:          subtotal,
         ppn:               ppn,
         total_harga:       total,
@@ -248,31 +248,6 @@ export default function OrderPage() {
   ];
 
   if (submitted) {
-    if (form.payment === "cod") {
-      return (
-        <div className="min-h-[60vh] flex flex-col items-center justify-center px-6 py-20 text-center">
-          <div className="text-6xl mb-6">🎉</div>
-          <h2 className="font-bold text-3xl mb-3" style={{ fontFamily: "var(--font-playfair,serif)", color: "#b8860b" }}>
-            Pre-Order Berhasil!
-          </h2>
-          <p className="text-sm mb-2" style={{ color: "#6b4a58" }}>
-            Terima kasih, <strong>{form.nama}</strong>. Pesanan Anda akan dikonfirmasi oleh tim kami.
-          </p>
-          <p className="text-xs mb-8 font-mono" style={{ color: "#a07080" }}>
-            ID Pesanan: #{String(orderId).slice(0, 8).toUpperCase()}
-          </p>
-          <div className="flex gap-3 flex-wrap justify-center">
-            <button onClick={() => navigate("/riwayat")} className="kol-btn-pesan px-8 py-3 rounded-full text-white text-sm font-semibold">
-              Lihat Riwayat
-            </button>
-            <button onClick={() => navigate("/koleksi")} className="btn-outline-cherry px-8 py-3 rounded-full text-sm font-semibold" style={{ color: "#8b4050" }}>
-              Lanjut Belanja
-            </button>
-          </div>
-        </div>
-      );
-    }
-
     return (
       <div className="min-h-screen bg-[#fffafb] px-6 sm:px-10 py-12">
         <div className="max-w-lg mx-auto space-y-6">
@@ -567,7 +542,6 @@ export default function OrderPage() {
                 {[
                   { id: "bank",    label: "Transfer Bank",         desc: "BCA · Mandiri · BNI" },
                   { id: "ewallet", label: "E-Wallet",              desc: "GoPay · OVO · Dana" },
-                  { id: "cod",     label: "COD (Bayar di Tempat)", desc: "Bayar saat barang diterima" },
                 ].map((pay) => {
                   const isSelected = form.payment === pay.id;
                   return (
