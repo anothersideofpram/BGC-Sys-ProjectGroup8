@@ -246,7 +246,7 @@ export default function LandingPage() {
             <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
               <LuMapPin size={13} style={{ color: "#e8c862", marginTop: "2px", flexShrink: 0 }} />
               <span style={{ fontSize: "12px", color: "rgba(255,220,235,0.6)", lineHeight: 1.6 }}>
-                Jl. Contoh No. 1,<br />Kota Anda, Indonesia
+              Jl. Gn. Merapi No.21, Tengkerang Timur, Tenayan Raya,<br />Kota Pekanbaru, Riau
               </span>
             </div>
           </div>

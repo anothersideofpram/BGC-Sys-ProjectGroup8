@@ -53,7 +53,16 @@ const SOCIAL_LINKS = [
   },
 ];
 
-function SocialIcon({ id, icon: Icon, label, href, hoverColor, glowColor, bg, hoverBg }) {
+function SocialIcon({
+  id,
+  icon: Icon,
+  label,
+  href,
+  hoverColor,
+  glowColor,
+  bg,
+  hoverBg,
+}) {
   return (
     <a
       id={`footer-social-${id}`}
@@ -93,7 +102,14 @@ function SocialIcon({ id, icon: Icon, label, href, hoverColor, glowColor, bg, ho
       }}
     >
       <Icon size={20} />
-      <span style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>
+      <span
+        style={{
+          fontSize: "9px",
+          fontWeight: 700,
+          letterSpacing: "0.06em",
+          textTransform: "uppercase",
+        }}
+      >
         {label}
       </span>
     </a>
@@ -135,12 +151,24 @@ function FooterLink({ to, href, children }) {
   const style = { ...base, ...(hov ? hover : {}) };
   if (to)
     return (
-      <Link to={to} style={style} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
+      <Link
+        to={to}
+        style={style}
+        onMouseEnter={() => setHov(true)}
+        onMouseLeave={() => setHov(false)}
+      >
         {children}
       </Link>
     );
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" style={style} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={style}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+    >
       {children}
     </a>
   );
@@ -150,7 +178,8 @@ function Footer() {
   return (
     <footer
       style={{
-        background: "linear-gradient(160deg, #140608 0%, #2a0e18 45%, #140608 100%)",
+        background:
+          "linear-gradient(160deg, #140608 0%, #2a0e18 45%, #140608 100%)",
         borderTop: "1px solid rgba(184,134,11,0.25)",
       }}
     >
@@ -206,29 +235,75 @@ function Footer() {
             href="https://wa.me/6285761004981"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ display: "flex", alignItems: "flex-start", gap: "8px", marginBottom: "10px", textDecoration: "none" }}
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "8px",
+              marginBottom: "10px",
+              textDecoration: "none",
+            }}
           >
-            <LuPhone size={13} style={{ color: "#25D366", marginTop: "2px", flexShrink: 0 }} />
-            <span style={{ fontSize: "12px", color: "rgba(255,220,235,0.6)", lineHeight: 1.5 }}>
+            <LuPhone
+              size={13}
+              style={{ color: "#25D366", marginTop: "2px", flexShrink: 0 }}
+            />
+            <span
+              style={{
+                fontSize: "12px",
+                color: "rgba(255,220,235,0.6)",
+                lineHeight: 1.5,
+              }}
+            >
               0857-6100-4981
               <br />
-              <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.3)" }}>(WhatsApp / Retail)</span>
+              <span
+                style={{ fontSize: "10px", color: "rgba(255,255,255,0.3)" }}
+              >
+                (WhatsApp / Retail)
+              </span>
             </span>
           </a>
           <a
             href="mailto:blackgoldcherish@gmail.com"
-            style={{ display: "flex", alignItems: "flex-start", gap: "8px", marginBottom: "10px", textDecoration: "none" }}
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "8px",
+              marginBottom: "10px",
+              textDecoration: "none",
+            }}
           >
-            <LuMail size={13} style={{ color: "#e8c862", marginTop: "2px", flexShrink: 0 }} />
-            <span style={{ fontSize: "12px", color: "rgba(255,220,235,0.6)", lineHeight: 1.5 }}>
+            <LuMail
+              size={13}
+              style={{ color: "#e8c862", marginTop: "2px", flexShrink: 0 }}
+            />
+            <span
+              style={{
+                fontSize: "12px",
+                color: "rgba(255,220,235,0.6)",
+                lineHeight: 1.5,
+              }}
+            >
               blackgoldcherish@gmail.com
             </span>
           </a>
-          <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
-            <LuMapPin size={13} style={{ color: "#e8c862", marginTop: "2px", flexShrink: 0 }} />
-            <span style={{ fontSize: "12px", color: "rgba(255,220,235,0.6)", lineHeight: 1.6 }}>
-              Jl. Contoh No. 1,<br />
-              Kota Anda, Indonesia
+          <div
+            style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}
+          >
+            <LuMapPin
+              size={13}
+              style={{ color: "#e8c862", marginTop: "2px", flexShrink: 0 }}
+            />
+            <span
+              style={{
+                fontSize: "12px",
+                color: "rgba(255,220,235,0.6)",
+                lineHeight: 1.6,
+              }}
+            >
+              Jl. Gn. Merapi No.21, Tengkerang Timur, Tenayan Raya,
+              <br />
+              Kota Pekanbaru, Riau
             </span>
           </div>
         </div>
@@ -265,7 +340,13 @@ function Footer() {
           gap: "8px",
         }}
       >
-        <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.2)", margin: 0 }}>
+        <p
+          style={{
+            fontSize: "10px",
+            color: "rgba(255,255,255,0.2)",
+            margin: 0,
+          }}
+        >
           © 2023 BlackGold Cherish. All rights reserved.
         </p>
       </div>
@@ -315,7 +396,11 @@ export default function MainLayout() {
               className="flex items-center gap-2.5 text-gradient-brand font-bold text-xl tracking-tight shrink-0"
               style={{ fontFamily: "var(--font-cinzel, serif)" }}
             >
-              <img src="/Logo BGC.jpg" alt="Logo" className="w-9 h-9 object-contain rounded-lg border border-pink-100" />
+              <img
+                src="/Logo BGC.jpg"
+                alt="Logo"
+                className="w-9 h-9 object-contain rounded-lg border border-pink-100"
+              />
               <span>BlackGold Cherish</span>
             </button>
 
@@ -331,7 +416,9 @@ export default function MainLayout() {
                     className="relative flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all duration-200 group"
                     style={{
                       color: isActive ? "#b8860b" : "#1a0a10",
-                      background: isActive ? "rgba(184,134,11,0.08)" : "transparent",
+                      background: isActive
+                        ? "rgba(184,134,11,0.08)"
+                        : "transparent",
                     }}
                   >
                     <span className="relative">
@@ -345,7 +432,8 @@ export default function MainLayout() {
                           className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 rounded-full flex items-center justify-center text-white font-extrabold"
                           style={{
                             fontSize: "9px",
-                            background: "linear-gradient(135deg, #e91e8c, #c9a227)",
+                            background:
+                              "linear-gradient(135deg, #e91e8c, #c9a227)",
                             padding: "0 3px",
                             lineHeight: 1,
                           }}
@@ -385,7 +473,11 @@ export default function MainLayout() {
               className="flex items-center gap-2 text-gradient-brand font-bold text-lg tracking-tight"
               style={{ fontFamily: "var(--font-cinzel, serif)" }}
             >
-              <img src="/Logo BGC.jpg" alt="Logo" className="w-8 h-8 object-contain rounded-lg border border-pink-100" />
+              <img
+                src="/Logo BGC.jpg"
+                alt="Logo"
+                className="w-8 h-8 object-contain rounded-lg border border-pink-100"
+              />
               <span>BlackGold Cherish</span>
             </button>
           </div>
@@ -423,12 +515,17 @@ export default function MainLayout() {
                 className="relative flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl transition-all duration-200"
                 style={{
                   color: isActive ? "#b8860b" : "#9e8a7a",
-                  background: isActive ? "rgba(184,134,11,0.08)" : "transparent",
+                  background: isActive
+                    ? "rgba(184,134,11,0.08)"
+                    : "transparent",
                   minWidth: "52px",
                 }}
               >
                 <span className="relative">
-                  <Icon size={22} style={{ transition: "transform 0.2s, color 0.2s" }} />
+                  <Icon
+                    size={22}
+                    style={{ transition: "transform 0.2s, color 0.2s" }}
+                  />
                   {isOrder && cartCount > 0 && (
                     <span
                       className="absolute -top-1.5 -right-2 min-w-[16px] h-4 rounded-full flex items-center justify-center text-white font-extrabold animate-pulse"
@@ -452,7 +549,11 @@ export default function MainLayout() {
                     textOverflow: "ellipsis",
                   }}
                 >
-                  {title === "Riwayat Pesanan" ? "Riwayat" : title === "Akun Saya" ? "Akun" : title}
+                  {title === "Riwayat Pesanan"
+                    ? "Riwayat"
+                    : title === "Akun Saya"
+                    ? "Akun"
+                    : title}
                 </span>
                 {isActive && (
                   <span
