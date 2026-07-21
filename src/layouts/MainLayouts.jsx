@@ -301,9 +301,9 @@ function Footer() {
                 lineHeight: 1.6,
               }}
             >
-              Jl. Gn. Merapi No.21, Tengkerang Timur, Tenayan Raya,
+              Jl. Gn. Merapi No.21, Tengkerang Timur, 
               <br />
-              Kota Pekanbaru, Riau
+              Tenayan Raya, Kota Pekanbaru, Riau
             </span>
           </div>
         </div>
